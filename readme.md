@@ -19,7 +19,7 @@ Data Engineer with hands-on experience building **end-to-end data pipelines** on
 
 ### **Technical Skills**
 - **SQL**, Python, **PySpark**, R, Julia 
-- **Databricks**, Docker
+- **Databricks**, **DLT Pipelines**, **Asset Bundles**, Docker
 - **Data Modeling**, Excel, BeautifulSoup (web scraping)
     </td>
     <td>
@@ -40,7 +40,7 @@ Data Engineer with hands-on experience building **end-to-end data pipelines** on
 - Designed and implemented a **Bronze–Silver–Gold (medallion) architecture** to analyze housing market stability in Harris County with **Design Specification** defining schemas, metrics, and job flow using **OBT** Table data model
 - Orchestrated notebook execution using **Databricks Jobs** with integrated **data quality, integrity, and unit tests** across pipeline layers and **logging** for errors and key metrics to improve observability
 ---
-### Bike Data Set Pipeline (Simulated Data Set)
+### Bike Data Set Pipeline (Simulated Data Set) (in progress)
 
 - Designed and implemented **Medallion architecture** **Databricks Job** to analyze a simulated data set using **meta data transformations**, **CI/CD** pipelines, strict **data quality**, and **auditability** using **Kimball** data model
 
