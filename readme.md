@@ -19,7 +19,7 @@ Data Engineer with hands-on experience building **end-to-end data pipelines** on
 
 ### **Technical Skills**
 - **SQL**, Python, **PySpark**, R, Julia 
-- **Databricks**, **DLT Pipelines**, **Asset Bundles**, Docker
+- **Databricks**, **DLT Pipelines**, **Asset Bundles**, **CICD**, Docker
 - **Data Modeling**, Excel, BeautifulSoup (web scraping)
     </td>
     <td>
