@@ -180,10 +180,10 @@ TRANSFORMATION = {
                 "cast": {
                     "int": {}
                 },
-                "expression": ["m_sales_price", "*", "m_sales_quanitity"]
+                "expression": ["m_sales_price", "*", "m_sales_quantity"]
 
             },
-            "m_sales_quanitity": {
+            "m_sales_quantity": {
                 "source": "sls_quantity",
                 "cast": {
                     "int": {}
@@ -195,7 +195,7 @@ TRANSFORMATION = {
                 "cast": {
                     "int": {}
                 },
-                "expression": ["m_sale_value", "/", "m_sales_quanitity"]
+                "expression": ["m_sale_value", "/", "m_sales_quantity"]
             }
         }
     },
