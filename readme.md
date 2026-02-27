@@ -48,6 +48,8 @@ Data Engineer with hands-on experience building **end-to-end data pipelines** on
 
 - **B.S. in Applied Mathematics (2022–2025)**  
 University of Twente, The Netherlands
+- Thesis on: Optimal Hyper Parameter Selection for **Training Neural Networks** with Heaviside Function
+- Took **Masters** level classes in **Data Science**, **Machine Learning**, Deep Learning, and **AI**
 ---
 
 ## Certifications  
@@ -56,6 +58,6 @@ University of Twente, The Netherlands
 ---
 
 ## Additional Skills
-- High theoretical knowledge of **Data Science**, **Machine Learning**, Deep Learning, and **AI**
-- Thesis on: Optimal Hyper Parameter Selection for **Training Neural Networks** with Heaviside Function
+
 - Highly adaptable to diverse cultural and professional environments
+- Highly motivated learner
