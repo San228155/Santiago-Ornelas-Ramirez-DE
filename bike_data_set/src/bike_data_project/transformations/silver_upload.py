@@ -114,7 +114,7 @@ def surrogate_key_addition(spark, meta_data)->None:
             )
         data_frame.write.mode("overwrite").saveAsTable(f"{out_path}{table_name}")
 
-def second_nf_configuration(df: DataFrame, df_name: str, table_configs: dict[str, Any]) -> None:
+def second_nf_configuration(df: DataFrame, table_configs: dict[str, Any]) -> df:
     """
     Separates df into 2nd NF compliant rows and quarantines non compliant rows
     """
@@ -129,31 +129,33 @@ def second_nf_configuration(df: DataFrame, df_name: str, table_configs: dict[str
 
     malformed_condition = (F.col("duplicate_rows") > 1) | unknown_condition
 
-    duplicate_rows = (
+    malformed_rows = (
         df.groupBy(*primary_key)
         .agg(F.count("*").alias("duplicate_rows"))
         .filter(malformed_condition)
     )
 
-    duplicate_keys = [
-        tuple(row[col] for col in primary_key)
-        for row in duplicate_rows.collect()
-    ]
+    if malformed_rows.limit(1).count() != 0:
+        duplicate_keys = [
+            tuple(row[col] for col in primary_key)
+            for row in malformed_rows.collect()
+        ]
 
-    duplicate_key_structs = [
-        F.struct(*[F.lit(v) for v in key_tuple])
-        for key_tuple in duplicate_keys
-    ]
+        duplicate_key_structs = [
+            F.struct(*[F.lit(v) for v in key_tuple])
+            for key_tuple in duplicate_keys
+        ]
 
 
-    # quarantine_df = df.join(duplicate_rows, on=primary_key, how="inner")
+        # quarantine_df = df.join(duplicate_rows, on=primary_key, how="inner")
 
-    second_nf_compliant_rows = df.filter(
-        ~F.struct(*primary_key).isin(duplicate_key_structs)
-    )
+        second_nf_compliant_rows = df.filter(
+            ~F.struct(*primary_key).isin(duplicate_key_structs)
+        )
 
-    # upload to a quarantine
-
+        # upload to a quarantine
+        return second_nf_compliant_rows
+    return df
 
 def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spark) -> None:
     """

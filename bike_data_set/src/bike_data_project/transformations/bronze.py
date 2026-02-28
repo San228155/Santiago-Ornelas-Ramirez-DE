@@ -1,6 +1,7 @@
 """
 Definitions of functions used in the bronze step of the pipeline
 """
+from pyspark.sql import DataFrame
 
 def missing_configs(config_dict: dict) -> None: 
     """
@@ -15,7 +16,7 @@ def missing_configs(config_dict: dict) -> None:
 
     return None
 
-def overwrite_allowed(original_table_name: str, config_dict: dict) -> Bool:
+def overwrite_allowed(original_table_name: str, config_dict: dict) -> bool:
     """
     Check if table is allowed to be overwritten
     """
@@ -45,13 +46,14 @@ def path_checker(path: str)-> bool:
     except Exception:
         return False
     
-def empty_table(row_count: int, original_table_name: str)-> None:
+def is_table_empty(spark, df: DataFrame) -> bool:
     """
-    Check if the read table is empty
+    Returns True if the latest operation wrote 0 rows.
+    Only valid when using overwrite mode.
     """
-    if row_count < 1:
-        raise ValueError(f"Data frame is empty: {original_table_name}")
 
+    return df.limit(1).count() == 0
+    
 
 
 

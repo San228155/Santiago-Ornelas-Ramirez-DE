@@ -33,17 +33,16 @@ def ingestion(spark, catalog: str, ingestion_schema: str, output_schema:str, vol
     reader = spark.read.option("header", "true")
     df:DataFrame = reader.csv(path)
 
-    # we check the row count to ensure that the table was read correctly, else we want the program to raise an error
-    row_count:int = df.count()
-
-    empty_table(row_count=row_count, original_table_name=original_table_name)
-    
-    print(f"number of rows in {clean_table_name}: {row_count}")
+    if is_table_empty(spark, df=df):
+        raise ValueError(f"uploaded table is empty: {catalog}.{output_schema}.{clean_table_name}")
 
     data_frame_columns = df.columns
     print(f"columns of table {original_table_name}: {data_frame_columns}")
 
-    df.write.mode("overwrite").format("delta").saveAsTable(f"{catalog}.{output_schema}.{clean_table_name}")
+    complete_write_path = f"{catalog}.{output_schema}.{clean_table_name}"
+    df.write.mode("overwrite").format("delta").saveAsTable(complete_write_path)
+        # we check the row count to ensure that the table was read correctly, else we want the program to raise an error
+
 
 
 

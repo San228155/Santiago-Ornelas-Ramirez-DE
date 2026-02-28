@@ -31,7 +31,7 @@ def clean_data_tables(spark, table_name:str, table_config:dict[str, Any]) -> Non
     incoming_table = f"{incoming_schema}{old_table_name}" 
     df = spark.read.table(f"{incoming_table}")
 
-    df = default_transformations(df, table_name, table_config) 
+    df = default_transformations(df, table_config) 
     df = rename_columns(df, table_name, table_config)
     df = handle_nulls_and_empty_strings(df, table_name, table_config)
     df = handle_hyphon(df, table_name, table_config)
@@ -48,7 +48,8 @@ def preprocess_data_tables(spark, table_name:str, table_config:dict[str, Any]) -
     out_schema = "bike_data_lakehouse.silver_preprocessed."
     
     df = spark.read.table(f"{incoming_schema}{table_name}")
-    df = apply_enum_aliases(df, table_name, table_config)
+
+    df = apply_enum_aliases(df, table_config)
     df = data_augmentation(df, table_name, table_config)
     df = intelligent_key_preparation(df, table_name, table_config)
 
@@ -66,7 +67,7 @@ def silver_table_upload(spark, table_name:str, table_config:dict[str, Any]) -> N
     out_schema = "bike_data_lakehouse.silver."
     
     df = spark.read.table(f"{incoming_schema}{table_name}")
-    normalized_tables = second_nf_configuration(df, table_name, table_config)
+    normalized_tables = second_nf_configuration(df, table_config)
     create_table(df, table_name, table_config, spark)
 
 

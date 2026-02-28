@@ -12,7 +12,7 @@ from pyspark.sql.window import Window
 from pyspark.sql.functions import xxhash64
 from delta.tables import DeltaTable
 
-def apply_enum_aliases(df: DataFrame, df_name: str, table_configs: dict[str, any]) -> DataFrame:
+def apply_enum_aliases(df: DataFrame, table_configs: dict[str, any]) -> DataFrame:
     """
     Applies mappings to make abbreviations and aliases into a standard name
     Validates all values are in an acceptable list (enum)
@@ -20,6 +20,7 @@ def apply_enum_aliases(df: DataFrame, df_name: str, table_configs: dict[str, any
 
     exprs = []
     quarantine_dfs = []
+    validation_conditions = []
 
     for col_key, col_val in table_configs["columns"].items():
         # we use a when condition chain to express the mappings
@@ -41,32 +42,23 @@ def apply_enum_aliases(df: DataFrame, df_name: str, table_configs: dict[str, any
         # optional check to ensure only allowed values are in the column
         if "validation" in col_val and "enum" in col_val["validation"]:
             valid_values = col_val["validation"]["enum"]
+            
+            validation_conditions.append(normalized_col.isin(valid_values))
 
-            invalid_condition = (
-                ~normalized_col.isin(valid_values)
-            )
+    if validation_conditions:
+        filter_condition = reduce(lambda x,y: x & y, validation_conditions)
 
-            invalid_rows = (
-                df.filter(invalid_condition)
-                  .select(
-                      *[
-                          normalized_col.alias(col_key)
-                          if c == col_key
-                          else F.lit("unknown").alias(c)
-                          for c in df.columns
-                      ]
-                  )
-            )
+    normalized_df = df.select(*exprs)
 
-            quarantine_dfs.append(invalid_rows)
+    normalized_df = normalized_df.withColumn(
+        "is_valid",
+        filter_condition
+    )
 
-    main_df = df.select(*exprs)
+    valid_df = normalized_df.filter(F.col("is_valid"))
+    quarantine_df = normalized_df.filter(~F.col("is_valid"))
 
-    if quarantine_dfs:
-        quarantine_df = reduce(DataFrame.unionByName, quarantine_dfs)
-        # return main_df.unionByName(quarantine_df)
-
-    return main_df
+    return valid_df
 
 def data_augmentation(df: DataFrame, table_name:str, table_configs:dict[str, Any]):
     """

@@ -7,12 +7,10 @@ def aggregation(spark, table_metadata:dict[str, Any], input_path:str, ) -> DataF
     Aggregation on table type (customers, products, and sales)
     """
     silver_table_names:list[dict[str, str]] = [t for t in table_metadata["tables"]]
-    print(f"10: {silver_table_names}")
     select_expr = []
     base_df: DataFrame = None
     df_list_excluding_first: list[DataFrame] = []
     coalesce_columns: set[str] = table_metadata.get("coalesce_columns", {})
-    print(f"coalesce: {coalesce_columns}")
     coalesce_select_expr = []
 
     # get the join information for the join
@@ -20,7 +18,6 @@ def aggregation(spark, table_metadata:dict[str, Any], input_path:str, ) -> DataF
         join_key = table_metadata["join_key"]
         join_type = table_metadata["join_type"]
 
-    print(f"23")
     # read the tables
     for i, silver_df in enumerate(silver_table_names):
         df_path: str = f"{input_path}.{silver_df}"

@@ -13,7 +13,7 @@ from pyspark.sql.functions import xxhash64
 from delta.tables import DeltaTable
 
 
-def default_transformations(df: DataFrame, df_name: str, table_configs: dict[str, Any]) -> DataFrame:
+def default_transformations(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:
     """
     Assumes all tables will need these transformations. Performes trim and lower on all tables and rows. Assumes all values are strings
     """
