@@ -1,19 +1,12 @@
-from pyspark.sql import SparkSession
+import pytest
 from pyspark.sql import types as T
-from src.bike_data_project.transformations.bronze import is_table_empty
-    
-def get_spark():
-    spark = SparkSession.getActiveSession()
-    if spark is None:
-        spark = SparkSession.builder.getOrCreate()
-    return spark
+from bike_project.transformations.bronze import is_table_empty
 
 
-def main():
+def test_is_table_empty(spark):
     """
-    test is_table_empty function from bronze.py
+    Test is_table_empty function from bronze.py
     """
-    spark = get_spark()
 
     test_cases = [
         {
@@ -27,25 +20,20 @@ def main():
             "expected": False
         }
     ]
+
     schema = T.StructType([
         T.StructField("col1", T.StringType(), True)
     ])
-
 
     for case in test_cases:
         df = spark.createDataFrame(case["data"], schema)
 
         result = is_table_empty(spark, df)
 
-        if result != case["expected"]:
-            raise ValueError(f"Test failed for {case['name']}: expected {case['expected']}, got {result}")
-
-        print(f"Test passed for {case['name']}")
-
-
-if __name__ == "__main__":
-    main()
-
+        assert result == case["expected"], (
+            f"Test failed for {case['name']}: "
+            f"expected {case['expected']}, got {result}"
+        )
 
 
 
