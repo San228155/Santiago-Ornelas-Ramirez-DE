@@ -7,9 +7,7 @@ These logic behind the tables rarely changes
 from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
 from typing import Any
-from pyspark.sql.types import IntegerType
 from functools import reduce
-from pyspark.sql.window import Window
 from pyspark.sql.functions import xxhash64
 from delta.tables import DeltaTable
 
@@ -21,7 +19,6 @@ def surrogate_key_addition(spark, meta_data)->None:
     """
     intelligent_tables = {}
     surrogate_key_dict = {}
-    surrogate_tables = {}
 
     ingestion_root_path = "bike_data_lakehouse.silver_preprocessed."
     out_path = "bike_data_lakehouse.silver_surrogate."
@@ -224,6 +221,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     existing_table_names = {row.tableName for row in existing_tables}
 
     if df_name not in existing_table_names:
+        spark.sql(create_table_sql)
         df.write.mode("append").saveAsTable(f"{catalog}.{schema}.{df_name}")
 
     else:
