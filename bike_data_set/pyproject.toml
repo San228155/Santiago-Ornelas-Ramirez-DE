@@ -14,7 +14,6 @@ python = "^3.11"
 delta-spark = "^3.2.0"
 pyspark = "^3.5.0"
 
-
 [tool.setuptools]
 package-dir = {"" = "src"}
 
