@@ -4,9 +4,9 @@ on:
   push:
     branches: [ main ]
     paths:
-    - "src/**"
-    - "tests/**"
-    - "pyproject.toml"
+    - "bike_data_set/src/**"
+    - "bike_data_set/tests/**"
+    - "bike_data_set/pyproject.toml"
   pull_request:
     branches: [ main ]
     paths:
