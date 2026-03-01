@@ -1,5 +1,3 @@
-from pyspark.sql import SparkSession
-
 from bike_data_project.config.meta_driven_transformations import TRANSFORMATION
 from bike_data_project.transformations.silver_clean import clean_data_tables
 from bike_data_project.transformations.silver_preprocessed import preprocess_data_tables
@@ -7,6 +5,9 @@ from bike_data_project.transformations.silver_upload import (
     silver_table_surrogate,
     silver_table_upload,
 )
+from pyspark.sql import SparkSession
+
+
 def get_spark():
     spark = SparkSession.getActiveSession()
     if spark is None:
