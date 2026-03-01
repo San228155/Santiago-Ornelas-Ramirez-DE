@@ -33,8 +33,8 @@ def test_apply_enum_aliases(spark):
             ],
 
             "expected": [
-                ("first", "this value should not change"),
-                ("second", "this value should not change"),
+                ("first", "this value should not change", True),
+                ("second", "this value should not change", True)
             ]
         }
     ]
