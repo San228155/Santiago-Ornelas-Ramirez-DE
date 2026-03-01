@@ -3,6 +3,7 @@ from typing import Any
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 
+
 def aggregation(spark, table_metadata:dict[str, Any], input_path:str, ) -> DataFrame:
     """
     Aggregation on table type (customers, products, and sales)

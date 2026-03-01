@@ -5,22 +5,21 @@ from pyspark.sql import DataFrame
 from bike_data_project.transformations.silver_clean import (
     casting,
     default_transformations,
-    handle_nulls_and_empty_strings,
     handle_hyphon,
+    handle_nulls_and_empty_strings,
     rename_columns,
 )
-
 from bike_data_project.transformations.silver_preprocess import (
     apply_enum_aliases,
     data_augmentation,
-    intelligent_key_preparation
+    intelligent_key_preparation,
 )
-
 from bike_data_project.transformations.silver_upload import (
     create_table,
     second_nf_configuration,
     surrogate_key_addition,
 )
+
 
 def clean_data_tables(spark, table_name:str, table_config:dict[str, Any]) -> None:
     print("cleaning_data")

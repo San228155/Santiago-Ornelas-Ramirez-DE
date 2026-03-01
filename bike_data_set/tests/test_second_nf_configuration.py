@@ -1,5 +1,7 @@
 import pyspark.sql.types as T
+
 from bike_data_project.transformations.silver_upload import second_nf_configuration
+
 
 def test_second_nf_configuration(spark):
     spark = spark

@@ -5,8 +5,8 @@ These functions requirements rarely change
 
 from typing import Any
 
-from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
+from pyspark.sql import functions as F
 
 
 def default_transformations(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:

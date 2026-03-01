@@ -1,4 +1,5 @@
 from pyspark.sql import types as T
+
 from bike_data_project.transformations.bronze import is_table_empty
 
 

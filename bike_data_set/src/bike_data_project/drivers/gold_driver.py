@@ -5,7 +5,6 @@ from bike_data_project.config.customer_gold_metadata import (
     product_gold_metadata,
     sales_gold_meta_data,
 )
-
 from bike_data_project.runner.gold_runner import gold_table_upload
 
 

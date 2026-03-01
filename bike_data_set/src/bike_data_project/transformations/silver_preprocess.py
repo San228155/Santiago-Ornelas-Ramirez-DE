@@ -3,13 +3,11 @@ Definitions of function used in the cleaning part of the Silver Transformations 
 The logic behind these functions can change overtime. For example, logic behind data augmentation
 """
 
-from typing import Any
 from functools import reduce
+from typing import Any
 
-from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
-
-
+from pyspark.sql import functions as F
 
 
 def apply_enum_aliases(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:

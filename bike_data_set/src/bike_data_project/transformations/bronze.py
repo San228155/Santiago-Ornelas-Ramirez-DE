@@ -4,6 +4,7 @@ Definitions of functions used in the bronze step of the pipeline
 
 from pyspark.sql import DataFrame
 
+
 def missing_configs(config_dict: dict) -> None: 
     """
     Check meta_data file has all minimum configurations for each table

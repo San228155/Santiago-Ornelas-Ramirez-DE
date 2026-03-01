@@ -7,11 +7,10 @@ These logic behind the tables rarely changes
 from functools import reduce
 from typing import Any
 
-from pyspark.sql import functions as F
-from pyspark.sql import DataFrame
-
-from pyspark.sql.functions import xxhash64
 from delta.tables import DeltaTable
+from pyspark.sql import DataFrame
+from pyspark.sql import functions as F
+from pyspark.sql.functions import xxhash64
 
 
 def surrogate_key_addition(spark, meta_data: dict[str, Any])->None:
