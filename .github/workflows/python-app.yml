@@ -65,6 +65,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .[dev]
 
+      - name: Show Java version
+        run: java -version
+
       - name: Run tests
         run: pytest -v
 
