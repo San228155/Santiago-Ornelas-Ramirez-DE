@@ -1,5 +1,5 @@
 """
-Contains a function that orchestrates all necessary functions for the bronze step in the pipeline. Python definitions can be found in bronze.py
+Contains a function that orchestrates all necessary functions for the bronze step in the pipeline. Python definitions can be found in bronze.py.
 """
 from pyspark.sql import DataFrame
 from typing import Any
