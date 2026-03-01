@@ -9,6 +9,7 @@ def missing_configs(config_dict: dict) -> None:
     """
     Check meta_data file has all minimum configurations for each table
     """
+    
     REQUIRED_FIELDS: list[str] = ["source", "table_type", "allow_overwrite"]
 
     missing_configs:list[str] = [field for field in REQUIRED_FIELDS if field not in config_dict]
