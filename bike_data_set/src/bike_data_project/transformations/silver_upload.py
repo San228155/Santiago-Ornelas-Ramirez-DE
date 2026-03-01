@@ -114,7 +114,7 @@ def surrogate_key_addition(spark, meta_data)->None:
             )
         data_frame.write.mode("overwrite").saveAsTable(f"{out_path}{table_name}")
 
-def second_nf_configuration(df: DataFrame, table_configs: dict[str, Any]) -> df:
+def second_nf_configuration(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:
     """
     Separates df into 2nd NF compliant rows and quarantines non compliant rows
     """
