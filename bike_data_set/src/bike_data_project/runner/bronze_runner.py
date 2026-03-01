@@ -9,7 +9,7 @@ from bike_data_project.transformations.bronze import (
     overwrite_allowed,
     valid_file_type,
     path_checker,
-    empty_table,
+    is_table_empty
 )
 
 def ingestion(spark, catalog: str, ingestion_schema: str, output_schema:str, volume:str, clean_table_name:str, config_dict:dict[str, Any]) -> None: #should not be importing last 4 arugmetns, should be read from configs and then extracted through read meta data
