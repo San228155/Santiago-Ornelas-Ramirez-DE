@@ -3,20 +3,17 @@ Definitions of function used in the cleaning part of the Silver Transformations 
 These functions requirements rarely change
 """
 
+from typing import Any
+
 from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
-from typing import Any
-from pyspark.sql.types import IntegerType
-from functools import reduce
-from pyspark.sql.window import Window
-from pyspark.sql.functions import xxhash64
-from delta.tables import DeltaTable
 
 
 def default_transformations(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:
     """
     Assumes all tables will need these transformations. Performes trim and lower on all tables and rows. Assumes all values are strings
     """
+
     if "defaults" in table_configs:
         df = df.select(*[
             F.lower(F.trim(F.col(c))).alias(c) for c in df.columns
@@ -102,6 +99,7 @@ def handle_hyphon(df: DataFrame, df_name: str, table_configs: dict[str, Any]) ->
     """
     Removes or replaces hyphones. If replaced, makes them an underscore
     """
+    
     expr = []
 
     for col_key, col_val in table_configs["columns"].items():

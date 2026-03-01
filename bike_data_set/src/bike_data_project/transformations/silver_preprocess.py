@@ -3,23 +3,22 @@ Definitions of function used in the cleaning part of the Silver Transformations 
 The logic behind these functions can change overtime. For example, logic behind data augmentation
 """
 
+from typing import Any
+from functools import reduce
+
 from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
-from typing import Any
-from pyspark.sql.types import IntegerType
-from functools import reduce
-from pyspark.sql.window import Window
-from pyspark.sql.functions import xxhash64
-from delta.tables import DeltaTable
 
-def apply_enum_aliases(df: DataFrame, table_configs: dict[str, any]) -> DataFrame:
+
+
+
+def apply_enum_aliases(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:
     """
     Applies mappings to make abbreviations and aliases into a standard name
     Validates all values are in an acceptable list (enum)
     """
 
     exprs = []
-    quarantine_dfs = []
     validation_conditions = []
 
     for col_key, col_val in table_configs["columns"].items():
@@ -56,7 +55,7 @@ def apply_enum_aliases(df: DataFrame, table_configs: dict[str, any]) -> DataFram
     )
 
     valid_df = normalized_df.filter(F.col("is_valid"))
-    quarantine_df = normalized_df.filter(~F.col("is_valid"))
+    # quarantine_df = normalized_df.filter(~F.col("is_valid"))
 
     return valid_df
 
@@ -101,6 +100,7 @@ def intelligent_key_preparation(df: DataFrame, table_name:str, table_configs:dic
     """
     Separates intelligent keys
     """
+    
     if table_configs.get("intelligent_key"):
         expr_list = []
 

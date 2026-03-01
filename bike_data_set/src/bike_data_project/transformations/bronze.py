@@ -1,6 +1,7 @@
 """
 Definitions of functions used in the bronze step of the pipeline
 """
+
 from pyspark.sql import DataFrame
 
 def missing_configs(config_dict: dict) -> None: 
@@ -41,10 +42,16 @@ def path_checker(path: str)-> bool:
     # Check if file path to be read exists in volume
     """
     try:
+        dbutils
+    except NameError:
+        return False
+
+    try:
         dbutils.fs.ls(path)
         return True
     except Exception:
         return False
+
     
 def is_table_empty(spark, df: DataFrame) -> bool:
     """

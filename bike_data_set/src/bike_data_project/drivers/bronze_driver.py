@@ -14,8 +14,6 @@ def get_spark():
     return spark
 
 def main():
-    input_path = "bike_data_lakehouse.silver"
-    output_path = "bike_data_lakehouse.gold"
     spark = get_spark()
 
     for volume, table_dicts in INGESTION.items():

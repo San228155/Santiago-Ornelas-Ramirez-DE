@@ -4,15 +4,17 @@ Surrogate key addition uses all tables to create a unified surrogate key definit
 These logic behind the tables rarely changes
 """
 
+from functools import reduce
+from typing import Any
+
 from pyspark.sql import functions as F
 from pyspark.sql import DataFrame
-from typing import Any
-from functools import reduce
+
 from pyspark.sql.functions import xxhash64
 from delta.tables import DeltaTable
 
 
-def surrogate_key_addition(spark, meta_data)->None:
+def surrogate_key_addition(spark, meta_data: dict[str, Any])->None:
     """
     Creates a "master" table of surrogate keys
     Joins tables that share a key, creates the surrogate key using hash64 and redistributes them into the tables

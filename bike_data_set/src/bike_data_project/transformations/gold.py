@@ -1,4 +1,5 @@
 from typing import Any
+
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 
@@ -11,7 +12,6 @@ def aggregation(spark, table_metadata:dict[str, Any], input_path:str, ) -> DataF
     base_df: DataFrame = None
     df_list_excluding_first: list[DataFrame] = []
     coalesce_columns: set[str] = table_metadata.get("coalesce_columns", {})
-    coalesce_select_expr = []
 
     # get the join information for the join
     if table_metadata.get("join_key"):

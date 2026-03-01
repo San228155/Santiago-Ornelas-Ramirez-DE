@@ -3,12 +3,11 @@ from pyspark.sql import SparkSession
 from bike_data_project.config.customer_gold_metadata import (
     customer_gold_metadata,
     product_gold_metadata,
-    sales_gold_meta_data
+    sales_gold_meta_data,
 )
 
-from bike_data_project.runner.gold_runner import (
-    gold_table_upload
-)
+from bike_data_project.runner.gold_runner import gold_table_upload
+
 
 def get_spark():
     spark = SparkSession.getActiveSession()
