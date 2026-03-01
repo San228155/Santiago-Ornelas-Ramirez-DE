@@ -10,9 +10,9 @@ on:
   pull_request:
     branches: [ main ]
     paths:
-      - "src/**"
-      - "tests/**"
-      - "pyproject.toml"
+      - "bike_data_set/src/**"
+      - "bike_data_set/tests/**"
+      - "bike_data_set/pyproject.toml"
 
 jobs:
 
@@ -42,7 +42,9 @@ jobs:
   test:
     name: Tests (Pytest + Spark)
     runs-on: ubuntu-latest
-    # needs: lint 
+    defaults:
+      run:
+        working-directory: bike_project
 
     steps:
       - uses: actions/checkout@v4
