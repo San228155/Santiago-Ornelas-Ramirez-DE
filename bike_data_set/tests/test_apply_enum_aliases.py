@@ -1,5 +1,5 @@
 from pyspark.sql import types as T
-from src.bike_data_project.transformations.silver_preprocess import apply_enum_aliases
+from bike_data_project.transformations.silver_preprocess import apply_enum_aliases
 
 
 def test_apply_enum_aliases(spark):

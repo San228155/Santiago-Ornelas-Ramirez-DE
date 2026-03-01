@@ -1,6 +1,5 @@
-import pytest
 from pyspark.sql import types as T
-from src.bike_data_project.transformations.bronze import is_table_empty
+from bike_data_project.transformations.bronze import is_table_empty
 
 
 def test_is_table_empty(spark):

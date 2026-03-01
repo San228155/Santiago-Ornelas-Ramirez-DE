@@ -1,5 +1,5 @@
 from pyspark.sql import types as T
-from src.bike_data_project.transformations.silver_clean import default_transformations
+from bike_data_project.transformations.silver_clean import default_transformations
 
 
 def test_default_transformations(spark):
