@@ -105,7 +105,7 @@ TRANSFORMATION = {
         "dim_product_line": {
           "source": "prd_line",
           "map": {
-            "road" : ["r"], 
+            "road" : ["r"],
             "standard": ["s"],
             "mountain": ["m"],
             "touring": ["t"]
@@ -137,7 +137,7 @@ TRANSFORMATION = {
         "primary_key": {
             "dim_sales_order_number": 7,
             "dim_product_key": 5
-            }, 
+            },
         "surrogate_key": {
             "dim_customer_sk": "dim_customer_id",
             "dim_product_sk": "dim_product_key"

@@ -2,7 +2,7 @@
 INGESTION = {
     # Volume
     "source_crm": {
-        "crm_customer_info":{ 
+        "crm_customer_info":{
                 "source":"cust_info", #file_name
                 "table_type": "CSV",
                 "allow_overwrite": True
