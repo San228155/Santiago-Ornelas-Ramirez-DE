@@ -42,7 +42,3 @@ def ingestion(spark, catalog: str, ingestion_schema: str, output_schema:str, vol
     complete_write_path = f"{catalog}.{output_schema}.{clean_table_name}"
     df.write.mode("overwrite").format("delta").saveAsTable(complete_write_path)
         # we check the row count to ensure that the table was read correctly, else we want the program to raise an error
-
-
-
-
