@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: bike_project
+        working-directory: bike_data_set
 
     steps:
       - uses: actions/checkout@v4
