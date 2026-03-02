@@ -167,7 +167,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     catalog = "bike_data_lakehouse"
     schema = "silver"
 
-    drop_logic = f"DROP TABLE IF EXI STS bike_data_lakehouse.silver.{df_name}"
+    drop_logic = f"DROP TABLE IF EXISTS bike_data_lakehouse.silver.{df_name}"
 
     spark.sql(drop_logic)
 
