@@ -197,7 +197,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
                 composite_pk_cols.append(col_name)
             else:
                 expr.append(
-                    f"{col_name} {dtype} NOT NULL PRIMARY KEY UNIQUE "
+                    f"{col_name} {dtype} NOT NULL PRIMARY KEY "
                     f"CHECK (LENGTH({col_name}) = {length_of_pk})"
                 )
         else:
@@ -208,9 +208,9 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
         table_constraints.append(
             f"CONSTRAINT pk_{df_name} PRIMARY KEY ({cols})"
         )
-        table_constraints.append(
-            f"CONSTRAINT uq_{df_name} UNIQUE ({cols})"
-        )
+        # table_constraints.append(
+        #     f"CONSTRAINT uq_{df_name} UNIQUE ({cols})"
+        # )
 
     column_expr = ", ".join(expr + table_constraints)
     
