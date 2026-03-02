@@ -24,7 +24,6 @@ def main():
     for table_metadata in gold_table_metadata:
         gold_table_upload(spark, table_metadata, input_path, output_path)
 
-
 if __name__ == "__main__":
     main()
 
