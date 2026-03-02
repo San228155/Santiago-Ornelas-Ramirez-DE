@@ -208,7 +208,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
         
     for surrogate_key_column in table_configs["surrogate_key"]:
         expr.append(f"{surrogate_key_column} BIGINT") #add constraints later
-        select_expr.append(F.col(col_name))
+        select_expr.append(F.col(surrogate_key_column))
 
     # if is_composite_pk:
     #     cols = ", ".join(composite_pk_cols)
