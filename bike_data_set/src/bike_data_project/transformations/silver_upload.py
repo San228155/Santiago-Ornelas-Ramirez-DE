@@ -231,8 +231,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     existing_tables = spark.sql(show_tables).collect()
     existing_table_names = {row.tableName for row in existing_tables}
     
-    select_expr_list = ", ".join(select_expr)
-    df.select(select_expr_list)
+    df.select(*select_expr)
 
     if df_name not in existing_table_names:
         spark.sql(create_table_sql)
