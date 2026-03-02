@@ -1,13 +1,16 @@
-from bike_data_project.transformations.silver_preprocessed import preprocess_data_tables
+import logging
 from pyspark.sql import SparkSession
 
 from bike_data_project.config.meta_driven_transformations import TRANSFORMATION
 from bike_data_project.transformations.silver_clean import clean_data_tables
+from bike_data_project.transformations.silver_preprocess import preprocess_data_tables
 from bike_data_project.transformations.silver_upload import (
     silver_table_surrogate,
     silver_table_upload,
 )
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def get_spark():
     spark = SparkSession.getActiveSession()
@@ -17,13 +20,13 @@ def get_spark():
 
 def main():
     spark = get_spark()
-
     for table_name, table_config in TRANSFORMATION.items():
         clean_data_tables(spark, table_name, table_config)
     for table_name, table_config in TRANSFORMATION.items():
         preprocess_data_tables(spark=spark, table_name=table_name, table_config=table_config)
         silver_table_surrogate(spark=spark, TRANSFORMATION=TRANSFORMATION)
     for table_name, table_config in TRANSFORMATION.items():
+        logger.info(f"uploading {table_name}")
         silver_table_upload(spark=spark, table_name=table_name, table_config=table_config)
 
 
