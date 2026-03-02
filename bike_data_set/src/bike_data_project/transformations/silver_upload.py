@@ -176,6 +176,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     cast_types = {"date", "int"}
 
     expr = []
+    select_expr = []
     # table_constraints = []
     composite_pk_cols = []
 
@@ -203,8 +204,11 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
         else:
             expr.append(f"{col_name} {dtype}")
         
+        select_expr.append(F.col(col_name))
+        
     for surrogate_key_column in table_configs["surrogate_key"]:
         expr.append(f"{surrogate_key_column} BIGINT") #add constraints later
+        select_expr.append(F.col(col_name))
 
     # if is_composite_pk:
     #     cols = ", ".join(composite_pk_cols)
@@ -229,6 +233,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     existing_tables = spark.sql(show_tables).collect()
     existing_table_names = {row.tableName for row in existing_tables}
     
+    df = df.select(*select_expr)
 
     if df_name not in existing_table_names:
         spark.sql(create_table_sql)
