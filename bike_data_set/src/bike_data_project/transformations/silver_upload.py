@@ -181,9 +181,6 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
 
     is_composite_pk = len(primary_key) > 1
 
-    for surrogate_key_column in table_configs["surrogate_key"]:
-        expr.append(f"{surrogate_key_column} BIGINT") #add constraints later
-
     for col_name, col_val in table_configs["columns"].items():
 
         cast_info = col_val.get("cast", {})
@@ -206,6 +203,8 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
         else:
             expr.append(f"{col_name} {dtype}")
         
+    for surrogate_key_column in table_configs["surrogate_key"]:
+        expr.append(f"{surrogate_key_column} BIGINT") #add constraints later
 
     # if is_composite_pk:
     #     cols = ", ".join(composite_pk_cols)
