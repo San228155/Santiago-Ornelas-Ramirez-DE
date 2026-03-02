@@ -46,7 +46,9 @@ product_gold_metadata = {
             "dim_product_name",
             "m_product_cost",
             "dim_product_line",
-            "dim_product_start_date"
+            "dim_product_start_date",
+            "dim_product_end_date"
+
         },
         "silver_erp_product_category_g1_v2": {
             "dim_category_id",

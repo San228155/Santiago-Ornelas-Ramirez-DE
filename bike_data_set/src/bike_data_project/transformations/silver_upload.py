@@ -177,47 +177,35 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
 
     expr = []
     select_expr = []
-    # table_constraints = []
-    composite_pk_cols = []
+    
+    intelligent_keys = table_configs.get("intelligent_key", {})
+    surrogate_keys = table_configs.get("surrogate_key", {})
+    columns_config = table_configs.get("columns", {})
 
-    is_composite_pk = len(primary_key) > 1
+    for col_name in df.columns:
+        if col_name in intelligent_keys:
+            dtype = "STRING"
 
-    for col_name, col_val in table_configs["columns"].items():
+        elif col_name in surrogate_keys:
+            dtype = "BIGINT"
 
-        cast_info = col_val.get("cast", {})
-        cast_type = next((k for k in cast_info if k in cast_types), None)
-        dtype = cast_type.upper() if cast_type else "STRING"
+        else:
+            col_val = columns_config.get(col_name, {})
+            cast_info = col_val.get("cast", {})
+            cast_type = next((k for k in cast_info if k in cast_types), None)
+            dtype = cast_type.upper() if cast_type else "STRING"
 
         if col_name in primary_key:
             length_of_pk = primary_key[col_name]
-            if is_composite_pk:
-                expr.append(
-                    f"{col_name} {dtype} NOT NULL "
-                    f"CHECK (LENGTH({col_name}) = {length_of_pk})"
-                )
-                composite_pk_cols.append(col_name)
-            else:
-                expr.append(
-                    f"{col_name} {dtype} NOT NULL "
-                    f"CHECK (LENGTH({col_name}) = {length_of_pk})"
-                )
+
+            expr.append(
+                f"{col_name} {dtype} NOT NULL CHECK (LENGTH({col_name}) = {length_of_pk})"
+            )
+
         else:
             expr.append(f"{col_name} {dtype}")
-        
-        select_expr.append(F.col(col_name))
-        
-    for surrogate_key_column in table_configs["surrogate_key"]:
-        expr.append(f"{surrogate_key_column} BIGINT") #add constraints later
-        select_expr.append(F.col(surrogate_key_column))
 
-    # if is_composite_pk:
-    #     cols = ", ".join(composite_pk_cols)
-    #     table_constraints.append(
-    #         f"CONSTRAINT pk_{df_name} PRIMARY KEY ({cols})"
-    #     )
-        # table_constraints.append(
-        #     f"CONSTRAINT uq_{df_name} UNIQUE ({cols})"
-        # )
+        select_expr.append(F.col(col_name))
 
     column_expr = ", ".join(expr)
     
