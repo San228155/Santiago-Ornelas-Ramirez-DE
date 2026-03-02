@@ -5,6 +5,7 @@ These logic behind the tables rarely changes
 """
 
 from functools import reduce
+import logging
 from typing import Any
 
 from delta.tables import DeltaTable
@@ -12,6 +13,8 @@ from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 from pyspark.sql.functions import xxhash64
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def surrogate_key_addition(spark, meta_data: dict[str, Any])->None:
     """
@@ -210,6 +213,8 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
         )
 
     column_expr = ", ".join(expr + table_constraints)
+    
+    logger.info(f"column expression {column_expr} from table: {df_name}")
 
     create_table_sql = f"""
         CREATE TABLE IF NOT EXISTS {catalog}.{schema}.{df_name} (
