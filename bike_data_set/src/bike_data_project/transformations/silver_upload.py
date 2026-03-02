@@ -188,6 +188,9 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
 
         elif col_name in surrogate_keys:
             dtype = "BIGINT"
+        
+        elif col_name == "is_valid":
+            dtype = "BOOLEAN"
 
         else:
             col_val = columns_config.get(col_name, {})
