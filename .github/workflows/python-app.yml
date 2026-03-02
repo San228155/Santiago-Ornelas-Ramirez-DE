@@ -97,4 +97,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bike-data-wheel
-          path: dist/*
+          path: bike_data_set/dist/*
