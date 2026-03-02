@@ -2,9 +2,9 @@ import logging
 from pyspark.sql import SparkSession
 
 from bike_data_project.config.meta_driven_transformations import TRANSFORMATION
-from bike_data_project.transformations.silver_clean import clean_data_tables
-from bike_data_project.transformations.silver_preprocess import preprocess_data_tables
-from bike_data_project.transformations.silver_upload import (
+from bike_data_project.runner.silver_clean import (
+    clean_data_tables,
+    preprocess_data_tables,
     silver_table_surrogate,
     silver_table_upload,
 )
