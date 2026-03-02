@@ -176,7 +176,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     cast_types = {"date", "int"}
 
     expr = []
-    table_constraints = []
+    # table_constraints = []
     composite_pk_cols = []
 
     is_composite_pk = len(primary_key) > 1
