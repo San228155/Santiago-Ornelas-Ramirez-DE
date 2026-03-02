@@ -41,21 +41,24 @@ def apply_enum_aliases(df: DataFrame, table_configs: dict[str, Any]) -> DataFram
             valid_values = col_val["validation"]["enum"]
             
             validation_conditions.append(normalized_col.isin(valid_values))
+            # should instead be appending the with column expression that includes the name of the column that is valid and then checking if all columns that are valid have true value
+
+    normalized_df = df.select(*exprs)
 
     if validation_conditions:
         filter_condition = reduce(lambda x,y: x & y, validation_conditions)
 
-    normalized_df = df.select(*exprs)
-
-    normalized_df = normalized_df.withColumn(
+        normalized_df = normalized_df.withColumn(
         "is_valid",
         filter_condition
-    )
+        )
 
-    valid_df = normalized_df.filter(F.col("is_valid"))
+        valid_df = normalized_df.filter(F.col("is_valid"))
     # quarantine_df = normalized_df.filter(~F.col("is_valid"))
 
-    return valid_df
+        return valid_df
+
+    return normalized_df
 
 def data_augmentation(df: DataFrame, table_name:str, table_configs:dict[str, Any]):
     """
