@@ -167,7 +167,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     catalog = "bike_data_lakehouse"
     schema = "silver"
 
-    drop_logic = f"DROP TABLE IF EXISTS bike_data_lakehouse.silver.{df_name}"
+    drop_logic = f"DROP TABLE IF EXI STS bike_data_lakehouse.silver.{df_name}"
 
     spark.sql(drop_logic)
 
@@ -176,6 +176,7 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     cast_types = {"date", "int"}
 
     expr = []
+    select_expr = []
     # table_constraints = []
     composite_pk_cols = []
 
@@ -202,6 +203,10 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
                 )
         else:
             expr.append(f"{col_name} {dtype}")
+        
+        select_expr.append(F.col(col_name))
+
+        
 
     # if is_composite_pk:
     #     cols = ", ".join(composite_pk_cols)
@@ -225,10 +230,13 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     show_tables = f"SHOW TABLES IN {catalog}.{schema}"
     existing_tables = spark.sql(show_tables).collect()
     existing_table_names = {row.tableName for row in existing_tables}
+    
+    select_expr_list = ", ".join(select_expr)
+    df.select(select_expr_list)
 
     if df_name not in existing_table_names:
         spark.sql(create_table_sql)
-        df.write.mode("append").saveAsTable(f"{catalog}.{schema}.{df_name}")
+        df.write.mode("overwrite").saveAsTable(f"{catalog}.{schema}.{df_name}")
 
     else:
         print(f"ERRROR - failed to write: this table {df_name} already exists in schema")
