@@ -47,6 +47,6 @@ ignore = ["E501"]
 "tests/*" = ["S101"]
 
 [project.scripts]
-bronze = "bike_data_set.drivers.bronze_driver:main"
-silver = "bike_data_set.drivers.silver_driver:main"
-gold = "bike_data_set.drivers.gold_driver:main"
+bronze = "bike_data_project.drivers.bronze_driver:main"
+silver = "bike_data_project.drivers.silver_driver:main"
+gold = "bike_data_project.drivers.gold_driver:main"
