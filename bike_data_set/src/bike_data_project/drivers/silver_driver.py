@@ -1,4 +1,5 @@
 import logging
+
 from pyspark.sql import SparkSession
 
 from bike_data_project.config.meta_driven_transformations import TRANSFORMATION
@@ -26,7 +27,7 @@ def main():
         preprocess_data_tables(spark=spark, table_name=table_name, table_config=table_config)
 
     silver_table_surrogate(spark=spark, TRANSFORMATION=TRANSFORMATION)
-    
+
     for table_name, table_config in TRANSFORMATION.items():
         logger.info(f"uploading {table_name}")
         silver_table_upload(spark=spark, table_name=table_name, table_config=table_config)
