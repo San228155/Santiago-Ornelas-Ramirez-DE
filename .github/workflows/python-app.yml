@@ -71,36 +71,37 @@ jobs:
       - name: Run tests
         run: pytest -v
 
-  build:
-    name: Build Package
-    runs-on: ubuntu-latest
-    needs: test
+  # build:
+  #   name: Build Package
+  #   runs-on: ubuntu-latest
+  #   needs: test
 
-    defaults:
-      run:
-        working-directory: bike_data_set
+  #   defaults:
+  #     run:
+  #       working-directory: bike_data_set
 
-    steps:
-      - uses: actions/checkout@v4
+  #   steps:
+  #     - uses: actions/checkout@v4
     
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11.14"
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.11.14"
     
-      - name: Install build tools
-        run: pip install build
+  #     - name: Install build tools
+  #       run: pip install build
     
-      - name: Build wheel
-        run: python -m build
+  #     - name: Build wheel
+  #       run: python -m build
     
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bike-data-wheel
-          path: bike_data_set/dist/*
+  #     - name: Upload artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: bike-data-wheel
+  #         path: bike_data_set/dist/*
 
   deploy:
     name: Deploy Bundle
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: test
   
