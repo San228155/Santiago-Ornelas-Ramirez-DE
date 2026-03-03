@@ -98,3 +98,32 @@ jobs:
         with:
           name: bike-data-wheel
           path: bike_data_set/dist/*
+
+  deploy:
+    name: Deploy Bundle
+    runs-on: ubuntu-latest
+    needs: test
+  
+    defaults:
+      run:
+        working-directory: bike_data_project
+  
+    steps:
+      - uses: actions/checkout@v4
+  
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+  
+      - name: Install Databricks CLI
+        run: pip install databricks-cli
+  
+      - name: Configure Databricks authentication
+        run: |
+          databricks configure --token <<EOF
+          ${{ secrets.DATABRICKS_HOST }}
+          ${{ secrets.DATABRICKS_TOKEN }}
+          EOF
+  
+      - name: Deploy Asset Bundle
+        run: databricks bundle deploy
