@@ -1,4 +1,3 @@
-# We assume were in the bike_data_lakehouse Catalog and in the raw_data Schema
 INGESTION = {
     # Volume
     "source_crm": {
@@ -37,7 +36,3 @@ INGESTION = {
             }
         }
 }
-
-# we want to ingest data
-# rename
-# pass it as a csv
