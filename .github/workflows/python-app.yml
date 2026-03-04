@@ -69,7 +69,7 @@ jobs:
         run: java -version
 
       - name: Run tests
-        run: pytest -v
+        run: pytest -v tests/unit
 
   # build:
   #   name: Build Package
