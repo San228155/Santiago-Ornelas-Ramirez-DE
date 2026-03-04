@@ -1,5 +1,4 @@
 INGESTION = {
-    # Volume
     "source_crm": {
         "crm_customer_info":{
                 "source":"cust_info", #file_name
@@ -17,7 +16,6 @@ INGESTION = {
                 "allow_overwrite": True
             }
     },
-    # Volume
     "source_erp": {
             "erp_customer_az_12": {
                 "source": "CUST_AZ12", #file_name
