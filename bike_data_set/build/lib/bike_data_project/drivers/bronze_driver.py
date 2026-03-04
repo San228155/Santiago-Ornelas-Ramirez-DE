@@ -20,14 +20,10 @@ def get_spark():
 
 def main():
     spark = get_spark()
-    logger.info("Pipeline started")
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {catalog}.{output_schema}"
-    spark.sql(create_schema)
 
     for volume, table_dicts in INGESTION.items():
         for clean_table_name, config_dict in table_dicts.items():
-            logger.info(f"""Loading bronze data: materializing table {clean_table_name} with path: {catalog}.{ingestion_schema}.{volume} 
-                        into {catalog}.{output_schema}.{clean_table_name}""")
+            logger.info(f"materializing table {clean_table_name}")
             ingestion(spark= spark, catalog = catalog, ingestion_schema= ingestion_schema, output_schema= output_schema, volume=volume, clean_table_name=clean_table_name, config_dict=config_dict)
 
 if __name__ == "__main__":

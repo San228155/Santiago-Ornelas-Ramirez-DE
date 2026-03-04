@@ -1,0 +1,4 @@
+[console_scripts]
+bronze = bike_data_project.drivers.bronze_driver:main
+gold = bike_data_project.drivers.gold_driver:main
+silver = bike_data_project.drivers.silver_driver:main

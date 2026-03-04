@@ -25,10 +25,7 @@ def surrogate_key_addition(spark, meta_data: dict[str, Any])->None:
     surrogate_key_dict = {}
 
     ingestion_root_path = "bike_data_lakehouse.silver_preprocessed."
-    out_path = "bike_data_lakehouse.silver_surrogate"
-
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {out_path}"
-    spark.sql(create_schema)
+    out_path = "bike_data_lakehouse.silver_surrogate."
 
     # creates a dictionary which details which tables need which surrogate key
     table_names = [names for names in meta_data]
@@ -116,7 +113,7 @@ def surrogate_key_addition(spark, meta_data: dict[str, Any])->None:
                 on=[column_name],
                 how="left"
             )
-        data_frame.write.mode("overwrite").saveAsTable(f"{out_path}.{table_name}")
+        data_frame.write.mode("overwrite").saveAsTable(f"{out_path}{table_name}")
 
 def second_nf_configuration(df: DataFrame, table_configs: dict[str, Any]) -> DataFrame:
     """
@@ -170,11 +167,9 @@ def create_table(df: DataFrame, df_name: str, table_configs: dict[str, Any], spa
     catalog = "bike_data_lakehouse"
     schema = "silver"
 
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {catalog}.{schema}"
-    spark.sql(create_schema)
-    # drop_logic = f"DROP TABLE IF EXISTS bike_data_lakehouse.silver.{df_name}"
+    drop_logic = f"DROP TABLE IF EXISTS bike_data_lakehouse.silver.{df_name}"
 
-    # spark.sql(drop_logic)
+    spark.sql(drop_logic)
 
     primary_key = table_configs["primary_key"]
 

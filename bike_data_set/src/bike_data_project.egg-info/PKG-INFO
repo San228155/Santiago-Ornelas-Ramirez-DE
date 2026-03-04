@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: bike-data-project
+Version: 0.1.0
+Summary: Bike data medallion pipeline
+Author: Your Name
+Requires-Python: >=3.11
+Provides-Extra: ci
+Requires-Dist: pyspark==3.5.0; extra == "ci"
+Requires-Dist: delta-spark==3.2.0; extra == "ci"
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: build; extra == "dev"

@@ -26,10 +26,7 @@ def clean_data_tables(spark, table_name:str, table_config:dict[str, Any]) -> Non
     incoming_schema:str = "bike_data_lakehouse.bronze."
     old_table_name:str = table_config["source"]
 
-    out_schema:str = "bike_data_lakehouse.silver_clean"
-
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {out_schema}"
-    spark.sql(create_schema)
+    out_schema:str = "bike_data_lakehouse.silver_clean."
 
     incoming_table:str = f"{incoming_schema}{old_table_name}" 
     df:DataFrame = spark.read.table(f"{incoming_table}")
@@ -40,16 +37,14 @@ def clean_data_tables(spark, table_name:str, table_config:dict[str, Any]) -> Non
     df:DataFrame = handle_hyphon(df, table_name, table_config)
     df:DataFrame = casting(df, table_name, table_config)
 
-    silver_table_name:str = f"{out_schema}.{table_name}"
+    silver_table_name:str = f"{out_schema}{table_name}"
     df.write.mode("overwrite").saveAsTable(f"{silver_table_name}")
 
 def preprocess_data_tables(spark, table_name:str, table_config:dict[str, Any]) -> None:
     print("preprocessing data")
     incoming_schema = "bike_data_lakehouse.silver_clean."
 
-    out_schema = "bike_data_lakehouse.silver_preprocessed"
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {out_schema}"
-    spark.sql(create_schema)
+    out_schema = "bike_data_lakehouse.silver_preprocessed."
     
     df = spark.read.table(f"{incoming_schema}{table_name}")
 
@@ -57,7 +52,7 @@ def preprocess_data_tables(spark, table_name:str, table_config:dict[str, Any]) -
     df = data_augmentation(df, table_name, table_config)
     df = intelligent_key_preparation(df, table_name, table_config)
 
-    df.write.mode("overwrite").saveAsTable(f"{out_schema}.{table_name}")
+    df.write.mode("overwrite").saveAsTable(f"{out_schema}{table_name}")
 
 def silver_table_surrogate(spark, TRANSFORMATION:dict[str,Any]):
     print("surrogate transformation")

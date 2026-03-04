@@ -1,0 +1,10 @@
+bundle:
+  name: bike_data_bundle
+
+artifacts:
+  bike_data_wheel:
+    type: whl
+    path: .
+
+include:
+  - ./resources/jobs/*.yml

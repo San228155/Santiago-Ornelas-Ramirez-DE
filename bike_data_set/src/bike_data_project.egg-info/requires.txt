@@ -1,0 +1,9 @@
+
+[ci]
+pyspark==3.5.0
+delta-spark==3.2.0
+
+[dev]
+pytest
+ruff
+build

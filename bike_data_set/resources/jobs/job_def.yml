@@ -1,0 +1,33 @@
+resources:
+  jobs:
+    bike_data_set_job:
+      name: bike_data_set_job
+      tasks:
+        - task_key: bronze_task
+          python_wheel_task:
+            package_name: bike_data_project
+            entry_point: bronze
+          environment_key: wheel_dependency
+        - task_key: silver_task
+          depends_on:
+            - task_key: bronze_task
+          python_wheel_task:
+            package_name: bike_data_project
+            entry_point: silver
+          environment_key: wheel_dependency
+        - task_key: gold_task
+          depends_on:
+            - task_key: silver_task
+          python_wheel_task:
+            package_name: bike_data_project
+            entry_point: gold
+          environment_key: wheel_dependency
+      queue:
+        enabled: true
+      environments:
+        - environment_key: wheel_dependency
+          spec:
+            dependencies:
+              - /Volumes/bike_data_lakehouse/wheel/wheel/bike_data_project-0.1.0-py3-none-any.whl
+            environment_version: "4"
+      performance_target: PERFORMANCE_OPTIMIZED

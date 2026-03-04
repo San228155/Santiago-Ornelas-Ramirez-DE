@@ -20,13 +20,10 @@ def get_spark():
     return spark
 
 def main():
-    logger.info("Silver Step Started")
     spark = get_spark()
     for table_name, table_config in TRANSFORMATION.items():
-        logger.info(f"Cleaning table {table_name}")
         clean_data_tables(spark, table_name, table_config)
     for table_name, table_config in TRANSFORMATION.items():
-        logger.info(f"Preprocessing table {table_name}")
         preprocess_data_tables(spark=spark, table_name=table_name, table_config=table_config)
 
     silver_table_surrogate(spark=spark, TRANSFORMATION=TRANSFORMATION)

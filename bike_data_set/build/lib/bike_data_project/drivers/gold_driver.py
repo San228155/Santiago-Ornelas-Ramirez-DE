@@ -19,18 +19,14 @@ def get_spark():
     return spark
 
 def main():
-    logger.info("Gold Step Started")
-    spark = get_spark()
     input_path = "bike_data_lakehouse.silver"
     output_path = "bike_data_lakehouse.gold"
-    
-    create_schema = f"CREATE SCHEMA IF NOT EXISTS {output_path}"
-    spark.sql(create_schema)
+    spark = get_spark()
 
     gold_table_metadata = [customer_gold_metadata, product_gold_metadata, sales_gold_meta_data]
 
     for table_metadata in gold_table_metadata:
-        logger.info(f"Writing table {table_metadata}")
+        logger.info(f"creating table {table_metadata}")
         gold_table_upload(spark, table_metadata, input_path, output_path)
 
 if __name__ == "__main__":
