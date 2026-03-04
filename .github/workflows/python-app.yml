@@ -105,10 +105,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
   
-    defaults:
-      run:
-        working-directory: bike_data_project
-  
     steps:
       - uses: actions/checkout@v4
   
