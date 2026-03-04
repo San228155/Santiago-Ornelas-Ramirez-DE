@@ -26,22 +26,40 @@ This projects requires the user create a Databricks Repo in Databricks and paste
 
 One needs to create a **catalog** with name: bike_data_lakehouse and **schema**: raw_data and two volumes with names: **source_crm**, **source_erp**. The necessary data can be found here https://github.com/DataWithBaraa/databricks_bootcamp_2026/tree/main/datasets/engineering. There are two folders with names corresponding to the two volumes created, upload only the files to the corresponding folder.
 
-Structure & Execution
+**Structure & Execution**
 All the transformations are executed through Databricks Jobs. 
 
 The job is created through the deployment of a Databricks Asset Bundle. The job calls python files extracted from a prebuilt python wheel. All future commits to the main branch of the repo automatically get put through a CI/CD process in which the wheel is rebuilt to accomodate any changess.
 
 This project is constructed with a Medallion Architecture in mind, hence it is devided into Bronze, Silver, and Gold layers.
-Each layer gets executed by a python file called the driver each executing a single runner which groups functions from transformation files.
+Each layer gets executed by a python file called the driver each executing a single runner which groups functions from transformation files. 
+
+All tables have meta data specified in the configs folder, one file for each medallion step. This file defines the file names, types, column names, types, needed transformations, etc.
 
 Driver:
-The driver is called on by the job directly and orchestrated 
+File called on by the job. It orchestrates a table by table transformation for a secific layer. 
 
-Bronze:
-Ingest all copy without transformations. Only change the incoming file type to delta table
-We do not allow shcema evolution. If a column is not in the previously specified schema, it is dropped
-Silver
-Clean Data
+Runner:
+File called by the driver. It organizes the order in which the transformation functions must be called to transform a table for each layer.
+
+Transformation files:
+These are files in which modularized python functions live. These files are responsible for defining the logic behind each transformation function.
+
+Table Metadata:
+Specify important information needed for each step in the medallion architecture.
+
+**Medallion Architecture Layer Responsabilities**
+- Table Metadata  
+  - Bronze
+
+**Bronze:**  
+Ingest all copy without transformations. Only change the incoming file type to delta table.
+Schema evolution is allowed as the incoming table is always overwritten, unless otherwise specified
+
+**Silver**  
+Clean all incoming data from bronze table
+All values are set to be trimmed and lowered
+If a column from bronze is not specified in the silver
 No dupicates or nulls in primary keys
 Minimum volume of valid data (specifics in tests in design spec)
 No values out of range (specifics in tests in design spec)
@@ -49,7 +67,7 @@ Schema enforcment
 All columns of schema must exist
 Columns must comply with predetermined data type
 Business rules are not enforced
-Gold
+**Gold**  
 Business rules enforced
 Aggregate tables
 SCD
