@@ -1,119 +1,242 @@
-Bike Data Set Star Schema Project
-Client Background
-Company X has asked us to organize their sales data for their data analysts. They want a Star Schema data model for fast queries and ease of understanding.
+# Bike Data Set – Star Schema Project
 
-We provide an pipeline for Company X using the medallion architecture and the Kimball approach. We emphasize providing clean, visible, and correct pipelines to assist on providing key insight and recommendations to the business.
+## Client Background
 
-Target Metrics
-Provide a data model fitting data quality needs and imporoving computational and storage efficiency:
-- Provided a data model using the Kimball approach. Reduced 6 tables into 1 fact table and 2 dimension tables
-- Provided data with guaranteed data quality
-- Provided gold table data with indexed columns to ensure fast queries [on primary keys and foreign keys]
-- Used the Star Schema to reduce file size by 4
+Company X requested support organizing their sales data for analytical use. They require a **Star Schema data model** to enable fast query performance and improve usability for data analysts.
 
-Summary
-Executive summary:
-- Provided data with improved query speed and reduced file size (by 4)
+We developed a pipeline for Company X using the **Medallion Architecture** and the **Kimball dimensional modeling approach**. Our focus is on delivering clean, transparent, and reliable pipelines that provide meaningful business insights and actionable recommendations.
 
-Customer summary (analyst):
-Installed a Star Schema data model with 3 tables, 1 fact and 2 dimension tables. Each table has an indexed primary key and the fact table has 2 indexed foreign keys for fast query performance. 
+---
 
-This pipeline provides data that without spaces and lower, as well as correct data types, adjustable meta data, and guaranteed 2nd NF configuration. 
+## Target Metrics
 
-**How to Use**
+We designed a data model that improves data quality, computational efficiency, and storage performance:
 
-This projects requires the user create a Databricks Repo in Databricks and paste the Santiago-Ornelas-Ramirez-De repo. In this repo, one will find a databricks.yml file that needs to be deployed either through Databricks Cli or through the UI which will create a job in Databricks jobs. One needs to run the job and the transformations will be processed and the tables will be automatically created. 
+- Implemented a Kimball-based dimensional model  
+- Reduced 6 source tables into:
+  - 1 fact table  
+  - 2 dimension tables  
+- Ensured guaranteed data quality standards  
+- Created indexed Gold tables:
+  - Primary keys indexed on all tables  
+  - Foreign keys indexed on the fact table  
+- Reduced file size by a factor of 4 using a Star Schema design  
 
-One needs to create a **catalog** with name: bike_data_lakehouse and **schema**: raw_data and two volumes with names: **source_crm**, **source_erp**. The necessary data can be found here https://github.com/DataWithBaraa/databricks_bootcamp_2026/tree/main/datasets/engineering. There are two folders with names corresponding to the two volumes created, upload only the files to the corresponding folder.
+---
 
-**Structure & Execution**
-All the transformations are executed through Databricks Jobs. 
+## Summary
 
-The job is created through the deployment of a Databricks Asset Bundle. The job calls python files extracted from a prebuilt python wheel. All future commits to the main branch of the repo automatically get put through a CI/CD process in which the wheel is rebuilt to accomodate any changess.
+### Executive Summary
 
-This project is constructed with a Medallion Architecture in mind, hence it is devided into Bronze, Silver, and Gold layers.
-Each layer gets executed by a python file called the driver each executing a single runner which groups functions from transformation files. 
+- Improved query performance  
+- Reduced file size by 4x  
+- Delivered a clean, analytics-ready Star Schema model  
 
-All tables have meta data specified in the configs folder, one file for each medallion step. This file defines the file names, types, column names, types, needed transformations, etc.
+### Customer Summary (Data Analysts)
 
-Driver:
-File called on by the job. It orchestrates a table by table transformation for a secific layer. 
+A 3-table Star Schema was implemented:
 
-Runner:
-File called by the driver. It organizes the order in which the transformation functions must be called to transform a table for each layer.
+- 1 fact table  
+- 2 dimension tables  
 
-Transformation files:
-These are files in which modularized python functions live. These files are responsible for defining the logic behind each transformation function.
+Each table includes:
 
-Table Metadata:
-Specify important information needed for each step in the medallion architecture.
+- Indexed primary keys  
+- Indexed foreign keys on the fact table for optimized query performance  
 
-**Medallion Architecture Layer Responsabilities**
-- Table Metadata  
-  - Bronze
-    - Expects the incoming table name
-    - Expects file type, only csv is enabled
-    - Specifies bronze table name
-    - Specifies if overwrite is allowed
-  - Silver
-    - Expects bronze table name
-    - Expects configurations to execute correct transformations
-    - Expects all columns from incoming table to be specified
-    - Specifies name of final silver table
-    - Specifies name of columns in final silver table
-  - Gold
-    - Expects silver table name
-    - Expects columns desired in gold table
-    - Specifies gold table name
-    - Specifies join conditions necessary for aggregation
-  
-**Bronze:**  
-- Ingest all copy without transformations. Only change the incoming file type to delta table.
-- Schema evolution is allowed as the incoming table is always overwritten, unless otherwise specified
-- All columns are ingested as strings
+The pipeline ensures:
 
-**Silver**  
-- All values are set to be trimmed and lowered
-- If a column from bronze is not specified in the silver, the program will stop 
-- Columns are renamed
-- nulls and empty strings are changed to a specified value depending on the datatype of column
-- hyphones and spaces are removed and replaced by underscore (if multiple of these are together, they are replaced by a single hyphon)
-- All columns that should not be strings are casted to the appropriate data type
-- Specified columns are augmented when possible
-- Intelligent keys are separated and surrogate keys are applied for gold transformation
-- All tables are put into second normal form
-**Gold**  
-- Dimension and fact tables are aggregated with predefiend columns
-- Surrogate keys and columns extracted from intelligent keys that were not part of the primary key are dropped.
+- Standardized column formatting (trimmed, lowercase, no spaces)  
+- Correct data types  
+- Adjustable metadata configurations  
+- Guaranteed Second Normal Form (2NF) compliance  
 
-Output & Data Contracts 
-Final, analytics-ready tables are published in the Gold layer
+---
 
-Downstream consumers should rely on Gold tables only
+## How to Use
 
-The intended customer are Data Analysts as the final product are tables with simple data structures, ideal to use for further visualization
+1. Create a Databricks Repo in Databricks.
+2. Clone the repository:  
+   **Santiago-Ornelas-Ramirez-De**
+3. Deploy the `databricks.yml` file using either:
+   - Databricks CLI  
+   - Databricks UI  
 
-All required table creation is managed internally as to allow visibility of the data throught the project. Any changes should be made to the transformation metadata. If a table name or column name is changed, it will need to be changed in each individual metadata table where the name is present. 
+Deployment will automatically create a Databricks Job.
 
-Monitoring & Troubleshooting
-Execution status and logs are available in Databricks Job Runs
+4. Run the job to execute transformations and create the required tables.
 
-Failed tasks prevent downstream execution
+### Required Setup
 
-Individual drivers may be rerun independently if remediation is required
+Create:
 
+- **Catalog:** `bike_data_lakehouse`
+- **Schema:** `raw_data`
+- **Volumes:**
+  - `source_crm`
+  - `source_erp`
 
-**Technology used**
-Databricks
-Pyspark
-Sql
-Beautiful Soup
+Upload the necessary data from the GitHub repository below into the corresponding volumes (upload only the files, not the folders):
 
-#Notes
-The data set and project was designed after Data with Barra 's Databricks Bootcamp. Link below:
+https://github.com/DataWithBaraa/databricks_bootcamp_2026/tree/main/datasets/engineering
+
+---
+
+## Structure & Execution
+
+All transformations are executed via **Databricks Jobs**.
+
+The job is created through deployment of a **Databricks Asset Bundle**.  
+The job executes Python files packaged within a prebuilt Python wheel.
+
+All future commits to the `main` branch automatically trigger a CI/CD pipeline that rebuilds the wheel to incorporate any changes.
+
+---
+
+# Architecture Overview
+
+This project follows the **Medallion Architecture**, consisting of:
+
+- Bronze Layer  
+- Silver Layer  
+- Gold Layer  
+
+Each layer is executed through a Python **driver file**, which calls a **runner module** responsible for grouping transformation functions.
+
+---
+
+## Core Components
+
+### Driver
+
+The file executed by the job.  
+It orchestrates table-by-table transformations for a specific layer.
+
+### Runner
+
+Called by the driver.  
+Defines the execution order of transformation functions for each table within a layer.
+
+### Transformation Files
+
+Contain modularized Python functions.  
+These define the transformation logic for each processing step.
+
+### Table Metadata
+
+Configuration files that define:
+
+- File names  
+- Data types  
+- Column names  
+- Required transformations  
+- Target table names  
+
+Each medallion layer has its own metadata configuration file.
+
+---
+
+# Medallion Architecture Layer Responsibilities
+
+## Bronze Layer
+
+Metadata requirements:
+
+- Incoming table name  
+- File type (CSV only supported)  
+- Bronze table name  
+- Overwrite configuration  
+
+Processing behavior:
+
+- Ingests raw data without transformation  
+- Converts file type to Delta table format  
+- Schema evolution allowed  
+- Tables overwritten by default (unless specified otherwise)  
+- All columns ingested as strings  
+
+---
+
+## Silver Layer
+
+Metadata requirements:
+
+- Bronze table name  
+- All incoming columns explicitly specified  
+- Transformation configurations  
+- Final Silver table name  
+- Final column names  
+
+Processing behavior:
+
+- Trim and lowercase all values  
+- Enforce strict column specification (job fails if column missing)  
+- Rename columns  
+- Replace nulls and empty strings with datatype-appropriate defaults  
+- Replace hyphens and spaces with underscores  
+  - Multiple consecutive special characters reduced to a single underscore  
+- Cast columns to correct data types  
+- Apply specified column augmentations  
+- Separate intelligent keys  
+- Generate surrogate keys for Gold layer  
+- Ensure Second Normal Form (2NF) compliance  
+
+---
+
+## Gold Layer
+
+Metadata requirements:
+
+- Silver table name  
+- Columns required in Gold table  
+- Gold table name  
+- Join conditions for aggregation  
+
+Processing behavior:
+
+- Create aggregated dimension and fact tables  
+- Drop surrogate keys not required in final model  
+- Remove intelligent key components not part of primary keys  
+
+---
+
+# Output & Data Contracts
+
+Final analytics-ready tables are published in the **Gold layer**.
+
+Downstream consumers should rely exclusively on Gold tables.
+
+The primary users are Data Analysts, as the final structure is optimized for visualization and reporting.
+
+All table creation is internally managed for transparency and governance.
+
+Any structural changes must be made in the transformation metadata files.  
+If a table or column name changes, it must be updated across all metadata configurations where referenced.
+
+---
+
+# Monitoring & Troubleshooting
+
+- Execution status and logs are available in **Databricks Job Runs**
+- Failed tasks prevent downstream execution
+- Individual drivers may be rerun independently for remediation
+
+---
+
+# Technology Used
+
+- Databricks  
+- PySpark  
+- SQL  
+- Beautiful Soup  
+
+---
+
+# Notes
+
+This dataset and project were designed following **Data With Baraa’s Databricks Bootcamp**:
+
 https://candle-gosling-511.notion.site/Databricks-Bootcamp-2e734b251f1280208697c641df833373?p=2e734b251f1280ab8dadc269e033cc38&pm=s
-
-
 
 
 
