@@ -51,63 +51,69 @@ Specify important information needed for each step in the medallion architecture
 **Medallion Architecture Layer Responsabilities**
 - Table Metadata  
   - Bronze
-
+    - Expects the incoming table name
+    - Expects file type, only csv is enabled
+    - Specifies bronze table name
+    - Specifies if overwrite is allowed
+  - Silver
+    - Expects bronze table name
+    - Expects configurations to execute correct transformations
+    - Expects all columns from incoming table to be specified
+    - Specifies name of final silver table
+    - Specifies name of columns in final silver table
+  - Gold
+    - Expects silver table name
+    - Expects columns desired in gold table
+    - Specifies gold table name
+    - Specifies join conditions necessary for aggregation
+  
 **Bronze:**  
-Ingest all copy without transformations. Only change the incoming file type to delta table.
-Schema evolution is allowed as the incoming table is always overwritten, unless otherwise specified
+- Ingest all copy without transformations. Only change the incoming file type to delta table.
+- Schema evolution is allowed as the incoming table is always overwritten, unless otherwise specified
+- All columns are ingested as strings
 
 **Silver**  
-Clean all incoming data from bronze table
-All values are set to be trimmed and lowered
-If a column from bronze is not specified in the silver
-No dupicates or nulls in primary keys
-Minimum volume of valid data (specifics in tests in design spec)
-No values out of range (specifics in tests in design spec)
-Schema enforcment
-All columns of schema must exist
-Columns must comply with predetermined data type
-Business rules are not enforced
+- All values are set to be trimmed and lowered
+- If a column from bronze is not specified in the silver, the program will stop 
+- Columns are renamed
+- nulls and empty strings are changed to a specified value depending on the datatype of column
+- hyphones and spaces are removed and replaced by underscore (if multiple of these are together, they are replaced by a single hyphon)
+- All columns that should not be strings are casted to the appropriate data type
+- Specified columns are augmented when possible
+- Intelligent keys are separated and surrogate keys are applied for gold transformation
+- All tables are put into second normal form
 **Gold**  
-Business rules enforced
-Aggregate tables
-SCD
-types of other tables (update)
-How to run this project
-In Databricks, go to Repos → Add Repo → paste this GitHub URL.
-Open Jobs → Create Job → Import → select jobs.json (found in jobs folder in this repo)
-The job will automatically reference the notebooks inside the repo
-This file uses a for_each_task for loop with parameters [2017,2018,...,2025]. These parameters are already included inside the jobs/jobs.json file for all 4 "for each" loops.
+- Dimension and fact tables are aggregated with predefiend columns
+- Surrogate keys and columns extracted from intelligent keys that were not part of the primary key are dropped.
 
-Output & Data Contracts (update)
+Output & Data Contracts 
 Final, analytics-ready tables are published in the Gold layer
-
-Table structures, relationships, and metrics are defined in the Design Specification
 
 Downstream consumers should rely on Gold tables only
 
 The intended customer are Data Analysts as the final product are tables with simple data structures, ideal to use for further visualization
 
-All required table creation is managed internally as to allow visibility of the data throught the project
+All required table creation is managed internally as to allow visibility of the data throught the project. Any changes should be made to the transformation metadata. If a table name or column name is changed, it will need to be changed in each individual metadata table where the name is present. 
 
 Monitoring & Troubleshooting
 Execution status and logs are available in Databricks Job Runs
 
 Failed tasks prevent downstream execution
 
-Individual notebooks may be rerun independently if remediation is required
+Individual drivers may be rerun independently if remediation is required
 
-All runs are logged in three different ways
 
-Pipeline runs - Logs the execution of all notebooks, independently, most importantly noting if the execution was succesful or not, in which case also noting the error
-Data quality runs- Logs the execution of unit tests for a notebook, independently, noting if the test was successful or not, including the error. This registers the most important data quality checks and will shut down the notebook and pipeline if it finds any
-Metrics - Logs metrics accumulated thorught the process of the pipeline. This does not shut down a notebook or pipeline and all metric descriptions are given in the design spec.
-Technology
+**Technology used**
 Databricks
 Pyspark
 Sql
 Beautiful Soup
-#Notes
 
-1. Harris County has a population of 5 million, the target percentile has a quarter of that population and the average household in the county is 2.5. Hence we have 5,000,000/(4*2.5) = 500,000
-2. a1 or a2 is the naming convention given in directly from the property information from Harris County
-3. https://hcad.org/pdata/pdata-property-downloads.html
+#Notes
+The data set and project was designed after Data with Barra 's Databricks Bootcamp. Link below:
+https://candle-gosling-511.notion.site/Databricks-Bootcamp-2e734b251f1280208697c641df833373?p=2e734b251f1280ab8dadc269e033cc38&pm=s
+
+
+
+
+
