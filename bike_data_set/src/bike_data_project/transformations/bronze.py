@@ -24,8 +24,7 @@ def overwrite_allowed(original_table_name: str, config_dict: dict) -> bool:
     Check if table is allowed to be overwritten
     """
     if not config_dict.get("allow_overwrite"):
-        # raise ValueError(f"{original_table_name} does not allow table overwrite")
-        return False
+        raise ValueError(f"{original_table_name} does not allow table overwrite")
     return True
 
 
