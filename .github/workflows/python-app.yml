@@ -107,7 +107,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: bike_data_project
+        working-directory: bike_data_set
 
     steps:
       - uses: actions/checkout@v4
