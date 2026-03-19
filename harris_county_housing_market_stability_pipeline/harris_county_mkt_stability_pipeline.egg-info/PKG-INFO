@@ -1,0 +1,6 @@
+Metadata-Version: 2.1
+Name: harris-county-mkt-stability-pipeline
+Version: 0.1.0
+Summary: Analysis of harris county market stability (pipeline)
+Requires-Python: >=3.11
+Requires-Dist: build

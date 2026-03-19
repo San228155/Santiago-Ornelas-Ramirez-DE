@@ -1,0 +1,10 @@
+# Databricks workspace
+BUNDLE_VAR_workspace_host=https://<your-workspace>.azuredatabricks.net
+DATABRICKS_TOKEN=<your-personal-access-token>
+ 
+# Target catalog (dev override)
+BUNDLE_VAR_harris_catalog=harris_county_catalog_dev
+ 
+# Pipeline config
+HARRIS_CATALOG=harris_county_catalog_dev
+HARRIS_SCHEMA=config

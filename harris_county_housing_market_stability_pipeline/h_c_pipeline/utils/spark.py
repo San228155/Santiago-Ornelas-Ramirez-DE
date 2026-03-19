@@ -1,0 +1,27 @@
+"""
+Single point of entry for the SparkSession.
+Databricks supplies a live session automatically; this wrapper
+makes local / test usage explicit and mockable.
+"""
+
+from __future__ import annotations
+
+import os
+
+from pyspark.sql import SparkSession
+
+
+def get_spark(app_name: str = "harris_county_pipeline") -> SparkSession:
+    """
+    Return the active SparkSession.
+
+    On Databricks the session already exists; builder.getOrCreate()
+    returns it without creating a new one.
+    On a developer laptop with Databricks Connect the session is
+    initialised from ~/.databrickscfg automatically.
+    """
+    return (
+        SparkSession.builder
+        .appName(app_name)
+        .getOrCreate()
+    )

@@ -1,0 +1,34 @@
+bundle:
+  name: h_c_bundle
+ 
+artifacts:
+  harris_county_whl:
+    type: whl
+    path: .
+ 
+include:
+  - ./resources/pipeline/*.yml
+  - ./resources/jobs/*.yml
+ 
+# targets:
+#   dev:
+#     mode: development
+#     default: true
+#     workspace:
+#       host: ${var.workspace_host}
+#     variables:
+#       harris_catalog: ${var.harris_catalog}
+ 
+#   prod:
+#     mode: production
+#     workspace:
+#       host: ${var.workspace_host}
+#     variables:
+#       harris_catalog: ${var.harris_catalog}
+ 
+# variables:
+#   workspace_host:
+#     description: Databricks workspace URL
+#   harris_catalog:
+#     description: Target Unity Catalog name
+#     default: harris_county_catalog

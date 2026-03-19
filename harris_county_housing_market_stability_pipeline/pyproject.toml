@@ -1,0 +1,21 @@
+[build-system]
+requires      = ["setuptools", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name        = "harris-county-mkt-stability-pipeline"
+version     = "0.1.0"
+description = "Analysis of harris county market stability (pipeline)"
+requires-python = ">=3.11"
+dependencies = [
+    "build",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["h_c_pipeline*"]
+
+[project.scripts]
+bootstrap = "bootstrap:main"
+zip_code_scraper = "read_zip:main"
+pipeline_code = "pipeline.ETL_pipeline.transformations.pipeline_code:main"
