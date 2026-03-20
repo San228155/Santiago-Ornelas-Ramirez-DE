@@ -66,20 +66,20 @@ Catalog Structure
 Created automatically by the bootstrap task on first run.
 harris_county_catalog/
 │
-├── config/                          ← pipeline configuration
-│   ├── bronze_ingestion_config
-│   ├── pipeline_column_names
-│   ├── pipeline_transformations
-│   ├── pipeline_output
-│   └── pipeline_value_maps
-│
-└── etl/                             ← pipeline output
-    ├── bronze/                      ← raw ingested data
-    ├── silver/                      ← cleaned and transformed
-    │   ├── owners
-    │   ├── zip
-    │   └── property
-    └── gold/                        ← analysis-ready data
+├── config/                          ← pipeline configuration  
+│   ├── bronze_ingestion_config  
+│   ├── pipeline_column_names  
+│   ├── pipeline_transformations  
+│   ├── pipeline_output  
+│   └── pipeline_value_maps  
+│  
+└── etl/                             ← pipeline output  
+    ├── bronze/                      ← raw ingested data  
+    ├── silver/                      ← cleaned and transformed  
+    │   ├── owners  
+    │   ├── zip  
+    │   └── property  
+    └── gold/                        ← analysis-ready data  
 
 Notes
 
