@@ -1,4 +1,3 @@
 [console_scripts]
-bootstrap = bootstrap:main
-pipeline_code = pipeline.ETL_pipeline.transformations.pipeline_code:main
-zip_code_scraper = read_zip:main
+bootstrap = h_c_pipeline.bootstrap:main
+zip_code_scraper = h_c_pipeline.read_zip:main

@@ -5,7 +5,7 @@ artifacts:
   harris_county_whl:
     type: whl
     path: .
-    build: poetry build
+    # build: poetry build
  
 include:
   - ./resources/pipelines/*.yml

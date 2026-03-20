@@ -1,18 +1,18 @@
-[tool.poetry]
-name        = "harris-county-mkt-stability-pipeline"
-version     = "0.1.0"
-description = "Analysis of harris county market stability (pipeline)"
-packages    = [{include = "h_c_pipeline"}]
- 
-[tool.poetry.dependencies]
-python = ">=3.11"
-build  = "*"
- 
-[tool.poetry.scripts]
+[build-system]
+requires      = ["setuptools", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name            = "harris-county-mkt-stability-pipeline"
+version         = "0.1.0"
+description     = "Analysis of harris county market stability (pipeline)"
+requires-python = ">=3.11"
+dependencies    = ["build"]
+
+[tool.setuptools.packages.find]
+where   = ["."]
+include = ["h_c_pipeline*"]
+
+[project.scripts]
 bootstrap        = "h_c_pipeline.bootstrap:main"
 zip_code_scraper = "h_c_pipeline.read_zip:main"
- 
-[build-system]
-requires      = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
- 
