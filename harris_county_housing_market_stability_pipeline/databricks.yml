@@ -5,11 +5,17 @@ artifacts:
   harris_county_whl:
     type: whl
     path: .
+    build: poetry build
  
 include:
-  - ./resources/pipeline/*.yml
+  - ./resources/pipelines/*.yml
   - ./resources/jobs/*.yml
  
+variables:
+  harris_catalog:
+    description: Target Unity Catalog name
+    default: harris_county_catalog
+
 # targets:
 #   dev:
 #     mode: development

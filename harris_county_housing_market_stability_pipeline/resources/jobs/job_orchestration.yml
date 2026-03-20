@@ -2,25 +2,29 @@ resources:
   jobs:
     harris_county_job:
       name: harris_county_etl
+      environments:
+        - environment_key: default
+          spec:
+            client: "1"
+            dependencies:
+              - /Volumes/${var.harris_catalog}/wheel/wheel/harris_county_mkt_stability_pipeline-0.1.0-py3-none-any.whl
       tasks:
         - task_key: bootstrap
+          environment_key: default
           python_wheel_task:
             package_name: harris_county_mkt_stability_pipeline
             entry_point: bootstrap
-          libraries:
-            - whl: /Volumes/${var.harris_catalog}/wheel/wheel/harris_county_mkt_stability_pipeline-0.1.0-py3-none-any.whl
 
         - task_key: scraper
           depends_on:
             - task_key: bootstrap
+          environment_key: default
           python_wheel_task:
             package_name: harris_county_mkt_stability_pipeline
             entry_point: zip_code_scraper
-          libraries:
-            - whl: /Volumes/${var.harris_catalog}/wheel/wheel/harris_county_mkt_stability_pipeline-0.1.0-py3-none-any.whl
 
         - task_key: pipeline
           depends_on:
             - task_key: scraper
           pipeline_task:
-            pipeline_id: ${resources.pipeline.pipeline_h_c_pipeline_code.id}
+            pipeline_id: ${resources.pipelines.pipeline_h_c_pipeline_code.id}

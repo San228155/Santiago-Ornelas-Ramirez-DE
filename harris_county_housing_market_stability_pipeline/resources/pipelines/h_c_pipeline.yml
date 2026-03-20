@@ -1,13 +1,12 @@
 resources:
   pipelines:
     pipeline_h_c_pipeline_code:
-      name: h_c_pipeline_code
+      name: h_c_pipeline_code_configuration
       configuration:
         years: 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025
       libraries:
-        - whl: /Volumes/${var.harris_catalog}/wheel/wheel/harris_county_mkt_stability_pipeline-0.1.0-py3-none-any.whl
         - glob:
-            include: ${workspace.root_path}/pipeline/silver_pipeline/transformations/**
+            include: ./h_c_pipeline/pipeline/ETL_pipeline/transformations/**
       schema: etl
       continuous: false
       development: false
@@ -15,4 +14,4 @@ resources:
       channel: CURRENT
       catalog: ${var.harris_catalog}
       serverless: true
-      root_path: ${workspace.root_path}/pipeline/silver_pipeline
+      root_path: ${workspace.root_path}/h_c_pipeline/pipeline/ETL_pipeline
