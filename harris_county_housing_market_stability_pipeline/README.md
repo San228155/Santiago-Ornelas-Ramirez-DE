@@ -44,72 +44,52 @@ Raw files are treated as immutable inputs and are first registered in the Bronze
 
 Note: Raw data files are not included in this repository. The Bronze layer defines the ingestion contract for all source data
 
-### Notebook Structure & Execution
+### Structure & Execution
 
-Notebooks are organized by medallion layer and numbered to indicate execution order:
+Deploying will:
+- Build and upload the Python wheel from pyproject.toml using setuptools
+- Upload all project files to your Databricks workspace
+- Create the job and pipeline resources in Databricks automatically
 
-Folder name represents the pipeline layer (Bronze / Silver / Gold)
+Run the pipeline
+- databricks bundle run harris_county_job
+- Or go to your Databricks workspace → Workflows → harris_county_etl → Run now.
 
-Each notebook is designed to be rerunnable and idempotent
+What happens when it runs
+The job executes three tasks automatically in this order:
+1. bootstrap    → creates the entire catalog structure and seeds all config data
+2. scraper      → scrapes zip code reference data into the catalog
+3. pipeline     → runs bronze → silver → gold transformations via DLT
+Each task must succeed before the next one starts. Everything is created automatically — no manual setup in Databricks is needed.
 
-Execution can be triggered either manually (for development) or via Databricks Jobs (for production runs)
+Catalog Structure
+Created automatically by the bootstrap task on first run.
+harris_county_catalog/
+│
+├── config/                          ← pipeline configuration
+│   ├── bronze_ingestion_config
+│   ├── pipeline_column_names
+│   ├── pipeline_transformations
+│   ├── pipeline_output
+│   └── pipeline_value_maps
+│
+└── etl/                             ← pipeline output
+    ├── bronze/                      ← raw ingested data
+    ├── silver/                      ← cleaned and transformed
+    │   ├── owners
+    │   ├── zip
+    │   └── property
+    └── gold/                        ← analysis-ready data
 
-The Repo must have this strucutre for the job to run
-- /Repo  
-  - /h_c_notebooks  
-    - /bronze  
-      - owners_bronze  
-      - property_bronze  
-      - zip_codes_bronze  
-    - /silver  
-      - owners_silver  
-      - property_silver  
-      - zip_codes_silver  
-      - joined_silver  
-    - /gold  
-      - Gold_layer  
-      - scd_gold  
-    - /logging  
-      - log_notebook  
-    - init_schema  
+Notes
 
-
-This project expects the user to create a Catalog with name: harris_county_catalog
-
-The catalog will have the followning architecture that will be created automatically (except for the catalog)
-
-- /harris_county_catalog  
-  - /raw_data  
-    - /owners  
-      - /raw_owners_{year}.txt  
-      - ...  
-    - /property  
-      - /raw_property_{year}.txt  
-      - ...  
-  - /bronze  
-    - /bronze_owners_{year}  
-    - ...  
-    - /bronze_property_{year}  
-    - ...  
-  - /silver  
-    - /cummulative_property_owners  
-  - /gold  
-    - /amount_of_quartile_changes  
-    - /cummulative_scd  
-    - /properties_in_quartile  
-    - /stability_categorization  
-  - /logging  
-    - /log_data_quality_tests  
-    - /log_pipe_line_runs  
-    - /log_table_metrics  
-  - /validation  
-    - /owners_validate  
-    - /property_validate  
-    - /zip_validate  
+.env contains sensitive credentials — never commit it, it is in .gitignore
+Bootstrap is safe to re-run — all operations are idempotent
+To deploy to a different catalog, change BUNDLE_VAR_harris_catalog and HARRIS_CATALOG in .env
 
   Comments:
   - the files in raw_data are .txt files (with delimiter /t)
-  - The files with an input {year} are parameters with range [2017,2018...,2025]. If this needs to be changed, the user must add the necessary data and change the inputs in
+  - The files with an input {year} are parameters with range [2017,2018...,2025]. If this needs to be changed, the user must add the necessary data and change the inputs in resources/pipelines/h_c_pipeline.yml
 
 Medallion Architecture Rules
 - Bronze:
@@ -134,12 +114,9 @@ Medallion Architecture Rules
 ### How to run this project
 
 1. In Databricks, go to Repos → Add Repo → paste this GitHub URL.
-2. Open Jobs → Create Job → Import → select jobs.json (found in jobs folder in this repo)
-3. The job will automatically reference the notebooks inside the repo
 
-This file uses a for_each_task for loop with parameters [2017,2018,...,2025]. These parameters are already included inside the jobs/jobs.json file for all 4 "for each" loops.
 
-### Output & Data Contracts (update)
+### Output & Data Contracts 
 
 Final, analytics-ready tables are published in the Gold layer
 
