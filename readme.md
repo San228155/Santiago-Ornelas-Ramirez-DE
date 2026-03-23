@@ -55,7 +55,7 @@ University of Twente, The Netherlands
 ## Certifications  
 
 - Databricks Certified Data Engineer Associate (in progress)
-- AWS Cloud Practicioner Certificate (in progress)
+- AZURE-900 Cloud Azure Fundamentals Certificate (in progress)
 ---
 
 ## Additional Skills
