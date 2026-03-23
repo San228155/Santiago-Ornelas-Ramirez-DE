@@ -37,10 +37,10 @@ Data Engineer with hands-on experience building **end-to-end data pipelines** on
 *End-to-end Databricks data engineering projects*
 ### Harris County Housing Stability Pipeline (Real Data Set)
 
-- Designed and implemented a **Bronze–Silver–Gold (medallion) architecture** to analyze housing market stability in Harris County with **Design Specification** using Declarative Pipelines and job flow using **OBT** Table data model.
-- Orchestrated notebook execution using **Databricks Jobs** with integrated **data quality, integrity, and unit tests** across pipeline layers and **logging** for errors and key metrics to improve observability.
+- Designed and implemented a **Bronze–Silver–Gold (medallion) architecture** to analyze housing market stability in Harris County with **Design Specification** using Lakeflow pipelines and job flow using **OBT** Table data model.
+- Orchestrated python files execution using **Databricks Jobs** with integrated **data quality, integrity, and unit tests** using expectations and post compute metrics across pipeline layers and **logging** for errors and key metrics to improve observability.
 ---
-### Bike Data Set Pipeline (Simulated Data Set) (in progress)
+### Bike Data Set Pipeline (Simulated Data Set)
 
 - Designed and implemented **Medallion architecture** **Databricks Job** to analyze a simulated data set using **meta data driven transformations**, **CI/CD** pipelines, strict **data quality** measures, and **auditability** tracking using **Kimball** data model
 
