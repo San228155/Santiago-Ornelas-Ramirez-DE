@@ -4,16 +4,14 @@ harris_county/bootstrap.py
 Idempotent bootstrap for harris_county_catalog.
  
 Execution order (enforced by DAB jobs.yml):
-    1. bootstrap.py   ← this file  (catalog, schema, tables, seed data)
-    2. scraper.py                  (land raw data)
-    3. SDP pipeline                (bronze → silver → gold)
+    1. bootstrap.py (catalog, schema, tables, seed data)
+    2. scraper.py (land raw data)
+    3. SDP pipeline (bronze → silver → gold)
  
 Run locally (Databricks Connect configured):
     python -m harris_county.bootstrap
 """
- 
-# from __future__ import annotations
- 
+
 import logging
 import os
  
@@ -22,17 +20,17 @@ from pyspark.sql import SparkSession
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 log = logging.getLogger(__name__)
  
-# ---------------------------------------------------------------------------
+
 # Config — swap via env vars for dev / staging
-# ---------------------------------------------------------------------------
+
 CATALOG = os.getenv("HARRIS_CATALOG", "harris_county_catalog")
 SCHEMA  = os.getenv("HARRIS_SCHEMA",  "config")
 FQN     = f"{CATALOG}.{SCHEMA}"
  
  
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
+
+# Helpers functions
+
 def get_spark() -> SparkSession:
     return SparkSession.builder.getOrCreate()
  
@@ -51,10 +49,9 @@ def seed(spark: SparkSession, table: str, scope: str, insert_body: str) -> None:
     sql(spark, f"DELETE FROM {fqn} WHERE {scope}")
     sql(spark, f"INSERT INTO {fqn} {insert_body}")
  
- 
-# ---------------------------------------------------------------------------
+
 # 1. Catalog & Schema
-# ---------------------------------------------------------------------------
+
 def create_catalog_and_schema(spark: SparkSession) -> None:
     section("Catalog & Schema")
     sql(spark, f"CREATE CATALOG IF NOT EXISTS {CATALOG}")
@@ -63,11 +60,8 @@ def create_catalog_and_schema(spark: SparkSession) -> None:
     log.info("schema: %s", FQN)
  
  
-# ---------------------------------------------------------------------------
 # 2. Tables (DDL)
-# ---------------------------------------------------------------------------
 TABLES: dict[str, str] = {
- 
     "bronze_ingestion_config": f"""
         CREATE TABLE IF NOT EXISTS {FQN}.bronze_ingestion_config (
             source_path         STRING,
@@ -134,9 +128,7 @@ def create_tables(spark: SparkSession) -> None:
         log.info("%s", name)
  
  
-# ---------------------------------------------------------------------------
 # 3. Seed: pipeline_column_names
-# ---------------------------------------------------------------------------
 def seed_pipeline_column_names(spark: SparkSession) -> None:
     section("Seed → pipeline_column_names")
  
@@ -177,9 +169,7 @@ def seed_pipeline_column_names(spark: SparkSession) -> None:
          """)
  
  
-# ---------------------------------------------------------------------------
 # 4. Seed: pipeline_transformations
-# ---------------------------------------------------------------------------
 def seed_pipeline_transformations(spark: SparkSession) -> None:
     section("Seed → pipeline_transformations")
  
@@ -258,9 +248,7 @@ def seed_pipeline_transformations(spark: SparkSession) -> None:
          """)
  
  
-# ---------------------------------------------------------------------------
 # 5. Seed: pipeline_output
-# ---------------------------------------------------------------------------
 def seed_pipeline_output(spark: SparkSession) -> None:
     section("Seed → pipeline_output")
  
@@ -297,10 +285,7 @@ def seed_pipeline_output(spark: SparkSession) -> None:
            (3, 'silver', 'property', 9, 'dim_year_date')
          """)
  
- 
-# ---------------------------------------------------------------------------
 # 6. Seed: pipeline_value_maps
-# ---------------------------------------------------------------------------
 def seed_pipeline_value_maps(spark: SparkSession) -> None:
     section("Seed → pipeline_value_maps")
  
@@ -312,11 +297,9 @@ def seed_pipeline_value_maps(spark: SparkSession) -> None:
            (3, 'silver', 'property', 'dim_state_class', 'A1', 'single_family_residential'),
            (3, 'silver', 'property', 'dim_state_class', 'A2', 'mobile_home')
          """)
- 
- 
-# ---------------------------------------------------------------------------
+    
 # Entrypoint
-# ---------------------------------------------------------------------------
+
 def main() -> None:
     spark = get_spark()
  

@@ -14,11 +14,6 @@ from pyspark.sql import SparkSession
 def get_spark(app_name: str = "harris_county_pipeline") -> SparkSession:
     """
     Return the active SparkSession.
-
-    On Databricks the session already exists; builder.getOrCreate()
-    returns it without creating a new one.
-    On a developer laptop with Databricks Connect the session is
-    initialised from ~/.databrickscfg automatically.
     """
     return (
         SparkSession.builder

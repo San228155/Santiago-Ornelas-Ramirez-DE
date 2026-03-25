@@ -18,18 +18,18 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SilverTable:
     # user definitions 
-    pipeline_id:     int
-    medallion:       str
-    table_name:      str
-    spark:           object
-    df:              object
-    year:            int    = None
+    pipeline_id: int
+    medallion: str
+    table_name: str
+    spark: object
+    df: object
+    year: int    = None
 
     # populated by _load_config
-    column_names:    dict   = field(default_factory=dict,  repr=False)
+    column_names: dict   = field(default_factory=dict,  repr=False)
     transformations: list   = field(default_factory=list,  repr=False)
-    output_cols:     list   = field(default_factory=list,  repr=False)
-    value_maps:      dict   = field(default_factory=dict,  repr=False)
+    output_cols: list   = field(default_factory=list,  repr=False)
+    value_maps: dict   = field(default_factory=dict,  repr=False)
 
 
     # ------------- named constructor --------------
@@ -37,11 +37,11 @@ class SilverTable:
     def from_catalog(cls, pipeline_id: int, medallion: str, table_name: str, spark, df, year: int = None):
         instance = cls(
             pipeline_id = pipeline_id,
-            medallion   = medallion,
-            table_name  = table_name,
-            spark       = spark,
-            df          = df,
-            year        = year,
+            medallion = medallion,
+            table_name = table_name,
+            spark = spark,
+            df = df,
+            year = year,
         )
         instance._load_config()
         return instance
@@ -100,7 +100,6 @@ class SilverTable:
             "isin":      lambda: col.isin(val.split("|")),
             "isnotnull": lambda: col.isNotNull(),
         }
-        print(dispatch)
         self.df = self.df.filter(dispatch[func]())
         return self
 
@@ -143,7 +142,6 @@ class SilverTable:
     """
     Config loader
     Extracts the information from tables:
-
     """
 
     def _load_config(self):

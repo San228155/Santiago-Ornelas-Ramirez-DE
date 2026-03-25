@@ -1,3 +1,15 @@
+"""
+This file computes all steps from bronze to gold. 
+Requirements: Needs bootstrap.py and read_zip.py to be ran beforehand
+
+It will transform all files from the specified years (this is a string inserted into pipeline configs as {years: "20xx, 20xx,..."})
+It process each year independently, transforming the owners and property table and saving them into silver schema
+The file with zip_code information is loaded and transformed and the appropriate joins are made per year and unioned into one table
+An SCD type 2 table is formed from the unioned table
+The gold tables are created from the scd type 2 table
+"""
+
+
 from functools import reduce
 
 from silver_table_class import SilverTable
