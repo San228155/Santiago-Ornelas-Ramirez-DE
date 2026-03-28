@@ -137,11 +137,6 @@ Medallion Architecture Rules
     - types of other tables (update)  
 
 
-### How to run this project
-
-1. In Databricks, go to Repos → Add Repo → paste this GitHub URL.
-
-
 ### Output & Data Contracts 
 
 Final, analytics-ready tables are published in the Gold layer
