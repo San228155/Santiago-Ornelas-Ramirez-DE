@@ -26,11 +26,37 @@ Overall market volatility is limited, as the median number of bracket changes pe
 Conclusion:
 The Harris County housing market for second-quartile earners in 2025 is stable and well-supplied. Although not the most static segment of the market, it offers availability and price predictability, positioning suitable housing options for this income group.
 
+## Project Decisions
+We will explore the following decisions
+### Data Model:
+The OBT data model was chosen as we prioritize the analysis end goal and storage is not a main concern. Since we want the tables to be analyst-friendly, we want easily queryable tables that avoid joins. Storage is also not a concern as data duplication is not an issue, we use Parquet and columnar compression, and the tables are designed to not be wide.
+
+### SCD Type 2:
+We chose to make the source of truth an SCD Type 2 table as it is more storage efficient than storing a complete historical row for every record at every point in time. Our analysis also requires historical data where only changes in the dimensions matter, since we measure stability, otherwise thought of as how stagnant the data is, perfect for SCD Type 2.
+
+### Orchestration:
+We use a combination of a pipeline that lives inside a job. Pipelines give us access to declarative tables and easily configurable SCD Type 2 tables, as well as additional observability tooling such as DAGs that help us understand the functioning of the pipeline, particularly when the input data has over 21 tables that get reduced to a handful of output tables. We also use expectations to further add observability to our data. We use jobs in order to orchestrate the creation of our infrastructure, data fetching (which a pipeline should not do), and the execution of one or more pipelines.
+
+### Tools Used in Each Pipeline Step:
+We use three purposely different tools in each step of the medallion architecture:
+
+Bronze: We use Autoloader as it is idempotent, assuming each file contains unique data. It also allows us to explicitly express our intent with schema evolution.
+Silver: We use classes to define all transformations. This centralizes our maintainability to one class per table and gives us a consistent way to apply transformations, which reduces the effort required to understand what differs from one table to the next.
+Gold: The tables are targeted to be analyst-friendly, hence we use SQL, more specifically PySpark SQL. Since these are more ad hoc requests, we want a flexible structure that can be easily modified without compromising other tables.
+
+### Configuration-Driven Pipeline:
+Pipelines should be as observable and understandable as possible. Using configuration tables provides a high degree of observability, as all configuration lives in queryable tables and any transformation should be abundantly clear. It also allows for quick, programmatic, and difficult-to-break update capacity.
+
+### Idempotency:
+Bronze tables (properties and owners) are fully idempotent, with the caveat that they use Autoloader.
+Silver and Gold tables are managed by Databricks and therefore would not be recalculated unnecessarily. Most importantly, the SCD Type 2 table is not altered incorrectly, as Spark Declarative Pipelines use sequence_by to disregard conflicting or duplicate data.
+The infrastructure uses CREATE [object] IF NOT EXISTS logic in its DDL.
+The zip code bronze table uses overwrite logic to allow for updates and is safe to recalculate multiple times, as the table is very small.
+
 ## How to Use
 This project implements an end-to-end Databricks pipeline that processes Harris County property data using a medallion architecture (Bronze, Silver, Gold). Pipeline execution is orchestrated via Databricks Jobs, with notebooks executed in a predefined order.
 
 Detailed schemas, metrics, and pipeline flow diagrams are documented in the Design Specification, which serves as the authoritative reference for this project.
-
 
 ### Input Data Requirements
 
