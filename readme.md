@@ -23,7 +23,7 @@ Data Engineer with hands-on experience building end-to-end data pipelines on Dat
 
 ## Experience
 
-### Data Engineer — SOFOM
+### Data Engineer - SOFOM
 **Mexico &nbsp;|&nbsp; March 2026 – Present**
 
 - Enabled executive and management reporting for 20+ staff by replacing a fully manual, error-prone process with an ETL pipeline built on Microsoft 365 and Azure (SQL Server), deployed via Docker
@@ -32,7 +32,7 @@ Data Engineer with hands-on experience building end-to-end data pipelines on Dat
 
 ---
 
-## Portfolio — End-to-End Databricks Data Engineering Projects
+## Portfolio - End-to-End Databricks Data Engineering Projects
 
 ### Harris County Housing Stability Pipeline *(Real Dataset)*
 - Designed a Bronze–Silver–Gold medallion architecture with Lakeflow pipelines and OBT data model; integrated expectations, quality metrics, and error logging across all layers via Databricks Jobs for full observability
