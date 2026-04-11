@@ -24,7 +24,7 @@ Data Engineer with hands-on experience building end-to-end data pipelines on Dat
 ## Experience
 
 ### Data Engineer - SOFOM
-**Mexico &nbsp;|&nbsp; March 2026 – Present**
+**Mexico &nbsp;|&nbsp; FEBRUARY 2026 – Present**
 
 - Enabled executive and management reporting for 20+ staff by replacing a fully manual, error-prone process with an ETL pipeline built on Microsoft 365 and Azure (SQL Server), deployed via Docker
 - Reduced reporting update times **from minutes to seconds**, eliminating manual intervention and ensuring executives always have access to current data for decision-making
